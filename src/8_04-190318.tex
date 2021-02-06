@@ -1,0 +1,167 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{March 18, 2019}
+\subsection{One-dimensional Systems}
+\subsubsection{Finite Square Well}
+Consider the finite square well potential:
+\[
+	V(x) = \begin{cases}
+		-V_0 & x \in [-a, a] \\
+		0 & \text{otherwise},
+	\end{cases}
+\]
+where \(V_0\) is some positive constant.
+\begin{center}
+	\begin{asy}
+		import graph;
+		import cse5;
+
+		real xmin = -2, xmax = -xmin;
+		real ymin = -2, ymax = 0.25;
+		real eps = 0.05;
+
+		real x0 = 1, V0 = 1.5;
+		real V(real x){ return abs(x) < x0 ? -V0 : 0; }
+
+		D((xmin, 0)--(xmax, 0), gray(0.7), Arrows(TeXHead));
+		D((0, ymin)--(0, ymax), gray(0.7), Arrows(TeXHead));
+		D(graph(V, xmin, xmax));
+
+		real E = -V0/2;
+		D((xmin, E)--(xmax, E), n_blue+linetype("4 4"));
+		MP("E < V_0", (xmax, E), dir(90), n_blue);
+
+		MP("a", (x0, 0), dir(90));
+		MP("-a", (-x0, 0), dir(90));
+		MP("V_0", (x0, -V0), dir(0));
+	\end{asy}
+\end{center}
+
+To solve this system, suppose we have a constant potential \(V(x) = V_0\) in some region. Then the time independent Schr\"odinger equation is
+\[
+	\psi''(x) = \frac{2m}{\hbar^2} (V_0 - E) \psi(x).
+\]
+
+Let's gain some intuition about the solution first.
+
+If \(E > V_0\), then this is classically allowed, and we have the solutions \(\sin kx\) and \(\cos kx\), where \(k = \frac{\sqrt{2m(E - V_0)}}{\hbar}\). If \(E - V_0\) is large, then \(k\) is large, and \(\lambda = 2\pi/k\) is small. Similarly, if \(E - V_0\) is small, then \(\lambda\) is large.
+
+If \(E < V_0\), then this is classically forbidden, and we have the solutions \(e^{\alpha x}\) and \(e^{-\alpha x}\), where \(\alpha = \frac{\sqrt{2m(E - V_0)}}{\hbar}\). Then, like before, if \(E - V_0\) is large, then we have \(\alpha\) is large, yielding a quick exponential function. Similarly, if \(E - V_0\) is small, then we have a slowly changing exponential function.
+
+To actually solve this, let's consider a simpler case \(V\) that we can use to form a solution to the finite square well problem. Consider the potential
+\[
+	V(x) = \begin{cases}
+		V_L & x < a \\
+		V_r & x > a,
+	\end{cases}
+\]
+where \(a \in \RR\).
+\begin{center}
+	\begin{asy}
+		import graph;
+		import cse5;
+
+		real xmin = 0, xmax = 2.5;
+		real ymin = -0.7, ymax = 1.6;
+		real eps = 0.05;
+
+		real a = 1, VL = 1.3, VR = -0.45;
+		real V(real x){ return x < a ? VL : VR; }
+
+		D((xmin, 0)--(xmax, 0), gray(0.7), Arrows(TeXHead));
+		D((0, ymin)--(0, ymax), gray(0.7), Arrows(TeXHead));
+		D((eps, VL)--MP("V_L", (-eps, VL), dir(180)), gray(0.7));
+		D((eps, VR)--MP("V_R", (-eps, VR), dir(180)), gray(0.7));
+		D((a, eps)--MP("a", (a, -eps), dir(-45)), gray(0.7));
+
+		D(graph(V, xmin, xmax));
+
+	\end{asy}
+\end{center}
+
+Consider the solutions \(\psi(x)\) of this potential. We know that \(\psi(x)\) is continuous. We will show that \(V(x)\) is continuous if \(V(x)\) is finite.
+\begin{align*}
+	\lim_{\Delta \to 0} \brackets{\psi'(a + \Delta) - \psi'(a - \Delta)}
+		&= \lim_{\Delta \to 0} \int_{a - \Delta}^{a + \Delta} \dv{}{x} \psi'(x) \,dx \\
+\intertext{By the Schr\"odinger equation,}
+		&= \lim_{\Delta \to 0} \int_{a - \Delta}^{a + \Delta} \frac{2m}{\hbar^2} (V(x) - E) \psi(x) \,dx.
+\end{align*}
+If \(V(x)\) is finite, then we have that \(\frac{2m}{\hbar^2} [V(x) - E] \psi(x)\). Then, we can write
+\[
+	\abs*{\int_{a - \Delta}^{a + \Delta} \frac{2m}{\hbar^2} [V(x) - E] \psi(x) \,dx} < c \cdot 2\Delta
+\]
+for some constant \(c\) and for all \(\Delta\), so we have
+\[
+	\lim_{\Delta \to 0} \brackets{\psi'(a + \Delta) - \psi'(a - \Delta)} = 0,
+\]
+and \(\psi'\) is continuous for finite \(V(x)\).
+
+Now suppose that \(V(x)\) is infinite. If we have a hard wall \(V_L = \infty\), then we have that
+\[
+	\lim_{\Delta \to 0} \int_{a - \Delta}^{a + \Delta} \frac{2m}{\hbar^2} (V(x) - E) \psi(x) \,dx \neq 0,
+\]
+and therefore \(\psi'\) is discontinuous. If we have a delta function \(\psi(x) = V_0 \delta(x - a)\), then
+\begin{align*}
+	\lim_{\Delta \to 0} \int_{a - \Delta}^{a + \Delta} \frac{2m}{\hbar^2} (V(x) - E) \psi(x) \,dx
+		&= \lim_{\Delta \to 0} \brackets*{
+			\int_{a - \Delta}^{a + \Delta} \frac{2m}{\hbar^2} V_0 \delta(x - a) \psi(x) \,dx
+			- \int_{a - \Delta}^{a + \Delta} \frac{2m}{\hbar^2} E \psi(x) \,dx
+		} \\
+\intertext{Note that the second term goes to \(0\), so this equals}
+		&= \lim_{\Delta \to 0} \frac{2m}{\hbar^2} V_0 \int_{a - \Delta}^{a + \Delta} \delta(x - a) \delta(x) \,dx = \frac{2m}{\hbar^2} V_0 \psi(a).
+\end{align*}
+Therefore, \(\psi'\) is discontinuous, and moreover there is a difference of \(\frac{2m}{\hbar^2} V_0 \psi(a)\) at the point \(a\).
+
+\iffalse
+\subsubsection{Harmonic Oscillator}
+Consider the harmonic oscillator, where the potential is
+\[
+	V(x) = \half kx^2.
+\]
+\begin{center}
+	\begin{asy}
+		import graph;
+		import cse5;
+
+		real xmin = -2, xmax = -xmin;
+		real ymin = -0.25, ymax = 2;
+
+		real k = 0.7;
+		real V(real x){ return 0.5 * k * x^2; }
+
+		D((xmin, 0)--(xmax, 0), gray(0.7), Arrows(TeXHead));
+		D((0, ymin)--(0, ymax), gray(0.7), Arrows(TeXHead));
+		D(graph(V, xmin, xmax));
+	\end{asy}
+\end{center}
+This is interesting because this is the first order Taylor expansion of any small oscillation.
+\fi
+
+\iffalse
+\subsubsection{Shooting Method Practice}
+Let's try to draw a wavefunction for the following potential and the given energy level.
+\begin{center}
+	\begin{asy}
+		import cse5;
+		import graph;
+
+		real xmin = 0, xmax = 10.5;
+		real ymin = 0, ymax = 5;
+		real x1 = 2, x2 = 7;
+
+		D((xmin, 0)--(xmax, 0), gray(0.6), EndArrow(TeXHead));
+		D((0, ymin)--(0, ymax), gray(0.6), EndArrow(TeXHead));
+
+		real V(real x){ return (0.612x^2 - 2.112x + 2.618)/(x - 1/2); }
+		D(graph(V, 0.8, 10.2));
+
+	\end{asy}
+\end{center}
+\fi
+
+
+
+
+\end{document}

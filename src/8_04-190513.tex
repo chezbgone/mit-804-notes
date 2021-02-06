@@ -1,0 +1,186 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{May 13, 2019}
+\subsection{General solution for Hydrogen Atom}
+Note: The notes from this day were adapted from a combination of the handwritten lecture notes, Yoshihiro Saito's notes, and Griffiths, as I was not at lecture.
+
+Let's find the complete solution for the wavefunctions of the hydrogen atom. Recall that we have the potential
+\[
+	V(r) = -\frac{\mathrm e^2}{r},
+\]
+where we are using Gaussian units again. We can again split the solution as \(\psi(r, \theta, \varphi) = u(r) \cdot Y(\theta, \varphi)\), where \(u(r) = r R(r)\).
+
+Since this potential is spherically symmetric, we already know that the set of solutions for \(Y\) are the \(Y_{\ell m}\) that we have computed already.
+
+For the radial part, recall that we have
+\[
+	-\frac{\hbar^2}{2m} \ddv{u}{r} + \brackets*{-\frac{\mathrm e^2}{r} + \frac{\hbar^2}{2m}\frac{\ell(\ell + 1)}{r^2}} u = Eu.
+\]
+
+We have already solved this for \(\ell = 0\), i.e.\ the spherically symmetric solutions. Now consider \(\ell > 0\). Since we are looking for bound states, we have \(E < 0\), so let us divide by \(E\). This gives
+\[
+	-\frac{\hbar^2}{2mE} \ddv{u}{r} = \brackets*{1 + \frac{\mathrm e}{r E} - \frac{\hbar^2}{2mE} \frac{\ell (\ell + 1)}{r^2}} u.
+\]
+For convenience, let
+\[
+	\alpha = \frac{\sqrt{-2mE}}{\hbar}, \qquad
+	\rho = \alpha r, \text{ and} \qquad
+	\rho_0 = \frac{2m \mathrm e^2}{\hbar^2 \alpha}.
+\]
+Then the equation can be rewritten as
+\[
+	\ddv{u}{\rho} = \brackets*{1 - \frac{\rho_0}{\rho} + \frac{\ell(\ell + 1)}{\rho^2}} u.
+\]
+
+To solve this, let's analyze the asymptotics as \(\rho \to \infty\). The equation gives
+\[
+	\ddv{u}{\rho} = u,
+\]
+so we know that \(u \sim A \exp(-\rho)\) for large \(\rho\), where we discard the part with positive exponent because we want the wavefunction to be normalizable.
+
+Similarly, we have
+\[
+	\rho \to 0^+ \implies \ddv{u}{\rho} = \frac{\ell(\ell + 1)}{\rho^2} u \implies u = B \rho^{\ell + 1} + C \rho^{-\ell} \implies u \sim B \rho^{\ell + 1}
+\]
+for small \(\rho\).
+
+
+Therefore, we will try to find a solution of the form \(u(\rho) = \rho^{\ell + 1} \exp(-\rho) v(\rho)\). We can compute the first few derivatives:
+\begin{align*}
+	\dv{u}{\rho} &= \rho^\ell \exp(-\rho) \brackets*{(\ell + 1 - \rho) v + \rho \dv{v}{\rho}} \\
+	\ddv{u}{\rho} &= \rho^\ell \exp(-\rho) \brackets*{
+		\parens*{-2\ell - 2 + \rho + \frac{\ell(\ell + 1)}{\rho}}v
+		+ 2(\ell + 1 - \rho) \dv{v}{\rho}
+		+ \rho \ddv{v}{\rho}
+	}
+\end{align*}
+Substituting this into the equation, we have
+\[
+	\rho \ddv{v}{\rho} + 2(\ell + 1 - \rho) \dv{v}{\rho} + [\rho_0 - 2(\ell + 1)] v = 0.
+\]
+
+To find \(v(\rho)\), suppose that we have the Taylor expansion \(v(\rho) = \sum_{j = 0}^{\infty} a_j \rho^j\). We have
+\begin{align*}
+	\dv{v}{\rho}
+		&= \sum_{j = 0}^{\infty} j a_j \rho^{j - 1}
+		 = \sum_{j = 0}^{\infty} (j + 1) a_{j + 1} \rho^j \\
+	\ddv{v}{\rho}
+		&= \sum_{j = 0}^{\infty} j(j + 1) a_{j + 1} \rho^{j - 1}.
+\end{align*}
+Substituting this into the equation, get get a recursion for the coefficients \(a_j\):
+\begin{gather*}
+	\sum_{j = 0}^{\infty} j(j + 1) a_{j + 1} \rho^j
+		+ 2(\ell + 1) \sum_{j = 0}^{\infty} (j + 1) a_{j + 1} \rho^j
+		- 2 \sum_{j = 0}^{\infty} j a_j \rho^j
+		+ [\rho_0 - 2(\ell + 1)] \sum_{j = 0}^{\infty} a_j \rho^j = 0 \\
+	j(j + 1) a_{j + 1}
+		+ 2(\ell + 1) (j + 1) a_{j + 1}
+		- 2 j a_j
+		+ [\rho_0 - 2(\ell + 1)] a_j = 0 \\
+	a_{j + 1} = \brackets*{\frac{2(j + \ell + 1) - \rho_0}{(j + 1)(j + 2\ell + 2)}} a_j
+\end{gather*}
+
+Now let's check whether or not this is a valid solution. For large \(j\), we have that the larger terms dominate for large \(\rho\). Then, we have
+\[
+	a_{j + 1} \approx \frac{2j}{j (j + 1)} a_j = \frac{2}{j + 1} a_j
+		\implies a_j \approx \frac{2^j}{j!} a_0.
+\]
+This implies that \(v(\rho) \approx \exp(2\rho)\), which is bad because it implies that \(u(\rho) = a_0 \rho^{\ell + 1} \exp(\rho)\). Therefore, the series must become zero at some point. In particular, there exists some \(j_{\text{max}}\) such that
+\[
+	a_{j_{\text{max}} + 1} = 0
+		\iff \brackets*{\frac{2(j_{\text{max}} + \ell + 1) - \rho_0}{(j_{\text{max}} + 1)(j_{\text{max}} + 2\ell + 2)}} = 0
+		\iff 2(j_{\text{max}} + \ell + 1) = \rho_0.
+\]
+Let \(j_{\text{max}} + \ell + 1 = n\) be the \vocab{principal quantum number}. Since \(\rho_0 = \frac{2m \mathrm e^2}{\hbar^2 \alpha}\) and \(\rho_0 = 2n\), equating these give \(n = \frac{m \mathrm e^2}{\hbar^2 \alpha}\). Letting \(a_0 = \frac{\hbar^2}{m \mathrm e^2} \approx \num{5.29e-11}{\m}\) be the \vocab{Bohr radius}, we have \(\alpha = \frac{1}{a_0 n} \implies \rho = \alpha r = \frac{r}{a_0 n}\).
+
+Since \(n\) is an integer, this gives the energy quantization of
+\[
+	2n = \rho_0
+		= \frac{2m \mathrm e^2}{\hbar^2 \alpha}
+		= \frac{2m \mathrm e^2}{\hbar^2 \sqrt{-2mE}/\hbar}
+		= \frac{2m \mathrm e^2}{\hbar \sqrt{-2mE}}.
+\]
+Solving for \(E\) gives
+\[
+	E_n = -\frac{m \mathrm e^4}{2\hbar^2} \cdot \frac{1}{n^2} \approx \frac{\num{-13.6}{\electronvolt}}{n^2},
+\]
+where \(m\) is the electron mass and \(\mathrm e\) is the elementary charge. This gives us the \vocab{Laguerre polynomials}. In particular,
+\[
+	v(\rho) = L^{2\ell + 1}_{n - \ell - 1}(2\rho),
+\]
+where
+\[
+	L^p_q(x) = (-1)^p \dnv{}{x}{p} L_{p + q}(x)
+\]
+is an \vocab{associated Laguerre polynomial}, and
+\[
+	L_r(x) = e^x \dnv{}{x}{r} (e^{-x} x^r)
+\]
+is the \(q\)th \vocab{Laguerre polynomial}. This concludes the search for the full solution.
+
+To summarize:
+\begin{proposition}[Eigenstates and eigenvalues of a Hydrogen Atom]
+	For the potential \(V = -\frac{\mathrm e^2}{r}\) (using Gaussian units), the energy eigenstates are
+	\[
+		\phi_{n \ell m} = A_{n \ell m} R_{n \ell}(r) Y_{\ell m}(\theta, \varphi),
+	\]
+	where
+	\begin{align*}
+		R_{n \ell}(r) &= \frac{u}{r} = \frac{1}{r} \rho^{\ell + 1} \exp(-\rho) v(\rho) \\
+			&= \frac{r^\ell}{(a_0 n)^{\ell + 1}} e^{-r/a_0 n} L^{2\ell + 1}_{n - \ell - 1}\parens*{\frac{2r}{a_0 n}}, \\
+		Y_{\ell m}(\theta, \varphi) &= e^{i m \varphi} P_{\ell m}(\cos \theta) \\
+			&= e^{i m \varphi} (1 - x^2)^{\abs m/2} \dnv{}{x}{\abs m} \brackets*{
+				\frac{1}{2^\ell \ell!} \dnv{}{x}{\ell} (x^2 - 1)^\ell
+			},
+	\end{align*}
+	and where \(L^p_q\) is defined above. The values \(n\), \(l\), and \(m\) are the principal, angular, and magnetic quantum numbers respectively, and
+	\[
+		n = 1, 2, 3, \dots, \qquad
+			\ell = 0, 1, 2, \dots, n - 1, \qquad
+			m = -\ell, -\ell + 1, \dots, \ell - 1, \ell.
+	\]
+	
+	The energy associated with \(\phi_{n \ell m}\) is given by
+	\[
+		E_n = -\frac{m \mathrm e^4}{2\hbar^2} \cdot \frac{1}{n^2}.
+	\]
+	The normalization constant is
+	\[
+		A_{n \ell m} = \sqrt{\parens*{\frac{2}{a_0 n}}^3 \frac{(n - \ell - 1)!}{2n [(n + \ell)!]^3}}.
+	\]
+\end{proposition}
+
+\begin{note}
+	The angular quantum number \(\ell\) corresponds to which orbital we have! In particular, we have the table
+	\begin{center}
+		\begin{tabular}{r c c c c c c c}
+      \toprule
+			\(\ell\) & 0 & 1 & 2 & 3 & 4 & 5 & \(\cdots\) \\
+				     & s & p & d & f & g & h & \(\cdots\) \\
+      \bottomrule
+		\end{tabular}
+	\end{center}
+\end{note}
+
+\subsubsection{Degeneracies}
+Note that each energy \(E_n\) only depends on \(n\). However, for each \(n\), there are \(n\) possible values for \(\ell\), and for each \(\ell\), there are \(2\ell + 1\) values for \(m\). This implies that \(E_n\) has degeneracy \(\sum_{\ell = 0}^{n - 1} (2\ell + 1) = n^2\).
+
+\subsubsection{Probability Density Function}
+Note that the probability does not depend on \(\varphi\), because in the wavefunction, the only term containing it is \(e^{im \varphi}\), and \(\abs{e^{im\varphi}} = 1\).
+
+Therefore, we have the probability density function
+\[
+	P(\rho, \theta) \propto R_{n \ell}(\rho)^2 P_{\ell m}(\cos\theta)^2.
+\]
+
+To find the radial density functions, we can integrate over all \(\theta\), i.e.
+\[
+	P_r(\rho) = \int_{-\pi/2}^{\pi/2} P(\rho, \theta) \,d\theta = 4\pi \rho^2 R_{n \ell}(\rho)^2.
+\]
+
+
+
+\end{document}
+

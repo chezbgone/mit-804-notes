@@ -1,0 +1,137 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{April 08, 2019}
+\subsection{Delta Function Potential}
+Recall that we have the delta function \(\delta(x) = \begin{cases}
+	0 & x \neq 0 \\ \infty & x = 0,
+\end{cases}\) where \(\infint \delta(x) f(x) \,dx = f(0)\). Then consider the potential function
+\[
+	V(x) = -W \delta(x),
+\]
+where \(W\) is positive.
+
+As usual, we will find the general solution for \(x < 0\) and \(x > 0\), and then use the boundary conditions to patch them together. Let's first consider the boundary conditions at \(x = 0\). We have by the Schr\"odinger Equation that
+\[
+	\lim_{\eps \to 0} \int_{-\eps}^{\eps} \brackets*{-\frac{\hbar^2}{2m}\psi'' - W \delta(x) \psi} \,dx
+		= \lim_{\eps \to 0} \int_{-\eps}^{\eps} E \psi \,dx.
+\]
+Simplifying both sides gives
+\[
+	-\frac{\hbar^2}{2m} [\psi'(0^+) - \psi'(0^-)] - W \psi(0) = 0,
+\]
+where \(0^+\) means we take the limit as the argument goes to \(0\) from the positive side. This gives
+\[
+	\psi'(0^+) - \psi(0^-) = -\frac{2mW}{\hbar^2} \psi(0).
+\]
+
+We know that the general wavefunction for this potential for the regions \(x < 0\) and \(x > 0\) are
+\[
+	\psi_1 = A e^{\alpha x} \implies \psi_1' = \alpha A e^{\alpha x}, \qquad
+	\psi_2 = B e^{-\alpha x} \implies \psi_1' = -\alpha B e^{-\alpha x},
+\]
+where \(\alpha = \sqrt{-\frac{2mE}{\hbar^2}}\). From the boundary conditions we have
+\begin{gather*}
+	\psi(0^+) = \psi(0^-) \implies A = B \\
+	\psi(0^+) - \psi(0^-) = -\frac{2mW}{\hbar^2} \psi(0) = -\frac{2mW}{\hbar^2} A \implies \alpha = \frac{mW}{\hbar^2}.
+\end{gather*}
+This gives
+\[
+	\sqrt{-\frac{2mE}{\hbar^2}} = \frac{mW}{\hbar^2} \implies E = \frac{mW^2}{2\hbar^2}.
+\]
+This means that there is only one eigenvalue! The resulting wavefunction turns out to be
+\[
+	\psi(x) = \frac{\sqrt{mW}}{\hbar} \exp(-mW \abs x /\hbar^2),
+\]
+and it looks like this
+\begin{center}
+	\begin{asy}
+		import cse5;
+		size(5cm);
+
+		real xmin = -2, xmax = 2;
+		real ymin = -0.5, ymax = 2;
+
+		D((xmin, 0)--(xmax, 0), gray(0.7), Arrows(TeXHead));
+		D((0, ymin)--(0, ymax), gray(0.7), Arrows(TeXHead));
+
+		real psi(real x){ return 1.8 * exp(-abs(x)); }
+		D(graph(psi, xmin, xmax));
+
+		MP("\psi(x)", (0, ymax), dir(0));
+		MP("x", (xmax, 0), dir(0));
+	\end{asy}
+\end{center}
+
+\subsection{Scattered States}
+\subsubsection{Free Particle}
+Let \(V = 0\). Then we have the Sch\"odinger equation
+\[
+	-\frac{\hbar^2}{2m} \ddv{\psi}{x} = E\psi.
+\]
+We then get the solution
+\[
+	\psi(x) = A e^{ikx} + Be^{-ikx},
+\]
+where \(k = \frac{\sqrt{2mE}}{\hbar}\), and the time evolution of it is
+\[
+	\psi(x, t) = A e^{i(kx - E/\hbar t)} + B e^{-i(kx + E/\hbar t)}.
+\]
+This is just a plane wave, where if \(k > 0\), then the plane wave travels to the right, and if \(k < 0\) then it travels to the left. This is not normalizable, so this wavefunction does not exist. However, we can use this with the Fourier Transform to find how any wavefunction evolves over time. In particular, if we have the initial wavefunction \(\psi(x, 0)\), then we compute
+\[
+	\tilde\psi(k) = \frac{1}{\sqrt{2\pi}} \infint \psi(x, 0) e^{-ikx} \,dx,
+\]
+and then we have
+\[
+	\psi(x, t) = \frac{1}{\sqrt{2\pi}} \infint \tilde\psi(k) e^{i(kx - \omega(k) t)} \,dk,
+\]
+where \(\omega(k) = \frac{E}{\hbar} = \frac{\hbar k^2}{2m}\).
+
+\begin{example}
+	Suppose we have a wavefunction that looks like a square:
+	\[
+		\psi(x, 0) = \begin{cases}
+			\frac{1}{\sqrt{2a}} & -a < x < a \\
+			0 & \text{else}.
+		\end{cases}
+	\]
+	\begin{center}
+		\begin{asy}
+			import cse5;
+			size(5cm);
+
+			real xmin = -2, xmax = 2;
+			real ymin = -0.5, ymax = 2;
+
+			D((xmin, 0)--(xmax, 0), gray(0.7), Arrows(TeXHead));
+			D((0, ymin)--(0, ymax), gray(0.7), Arrows(TeXHead));
+
+			real psi(real x){ return (abs(x) < 0.9) ? 1.8 : 0; }
+			D(graph(psi, xmin, xmax));
+
+			MP("\psi(x)", (0, ymax), dir(0));
+			MP("x", (xmax, 0), dir(0));
+		\end{asy}
+	\end{center}
+
+	Let's find the evolution of this wavefunction. We have
+	\begin{align*}
+		\tilde\psi(k) &= \frac{1}{\sqrt{2\pi}} \int_{-a}^{a} \frac{1}{\sqrt{2a}} e^{-ikx} \,dx \\
+			&= \frac{1}{k\sqrt{4\pi a}} (e^{-ika} - e^{ika}) \\
+			&= \frac{\sin ka}{k \sqrt{\pi a}}.
+	\end{align*}
+	Then, we have
+	\[
+		\psi(x, t) = \frac{1}{\sqrt{2\pi}} \infint \frac{\sin ka}{k\sqrt{\pi a}} e^{i(kx- \omega(k) t)} \,dk.
+	\]
+\end{example}
+
+
+
+
+
+
+
+\end{document}
+

@@ -1,0 +1,64 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{April 10, 2019}
+\subsection{Quantum Tunneling}
+Consider the step potential
+\[
+	V(x) = \begin{cases}
+		0 & x \leq 0 \\
+		V_0 & x > 0.
+	\end{cases}
+\]
+There are two cases depending on how large the energy is in relation to \(V_0\).  First, suppose that we have an energy \(E = \frac{\hbar^2 k_1^2}{2m} > V_0\). Let \(E - V = \frac{\hbar^2 k_2^2}{2m}\). Suppose that we have a wave with amplitude \(A_0\) moving to the left. Then in the two regions \(x \leq 0\) and \(x > 0\), we have
+\begin{align*}
+	-\frac{\hbar^2}{2m} \ddv{\psi}{x} = E\psi
+		&\implies \psi(x) = A_0 e^{ik_1 x} + A e^{-ik_1 x} \\
+	-\frac{\hbar^2}{2m} \ddv{\psi}{x} + V_0 \psi = E\psi
+		&\implies \psi(x) = B e^{ik_2 x},
+\end{align*}
+where \(A\) is the amplitude of reflected wave and \(B\) is the amplitude of transmitted wave. Applying the boundary conditions, we have
+\[
+	A_0 + A = B, \qquad
+	k_1 A_0 - k_1 A = k_2 B.
+\]
+Solving this, we have
+\[
+	A = \parens*{\frac{k_1 - k_2}{k_1 + k_2}} A_0, \qquad
+	B = \parens*{\frac{2k_1}{k_1 + k_2}} A_0.
+\]
+
+Let the \vocab{reflection coefficient} \(R\) and the \vocab{transmission coefficient} \(T\) of the system be the fraction of incident particles that are reflected and transmitted respectively. We have
+\begin{align*}
+	R &= \frac{\text{probability current of reflected wave}}{\text{probability current of incident wave}} \\
+	T &= \frac{\text{probability current of transmitted wave}}{\text{probability current of incident wave}}.
+\end{align*}
+Recall that the probability current \(J\) is the product of the probability density and the group velocity. This means that for a plane wave \(\psi = A_0 e^{i k_1 x} \implies \abs{\psi}^2 = \abs{A_0}^2\), we have its velocity \(\frac{\hbar k_1}{m}\), so
+\[
+	J = \frac{\hbar k_1}{m} \abs{A_0}^2.
+\]
+Alternatively, we could have used the formula that we proved on a problem set:
+\[
+	J = \frac{\hbar}{2m} \brackets*{\psi^* \dv{\psi}{x} - \psi \dv{\psi^*}{x}}.
+\]
+
+This gives the reflection and transmission coefficients
+\begin{align*}
+	R &= \frac{v_1 \abs{A}^2}{v_1 \abs{A_0}^2} = \frac{\abs{A}^2}{\abs{A_0}^2} \\
+	T &= \frac{v_2 \abs{B}^2}{v_1 \abs{A_0}^2} = \frac{\abs{B}^2}{\abs{A_0}^2},
+\end{align*}
+where
+\[
+	v_1 = \frac{\hbar k_1}{m}, \qquad v_2 = \frac{\hbar k_2}{m}.
+\]
+
+Expanding this out, we have
+\[
+	R = \parens*{\frac{k_1 - k_2}{k_1 + k_2}}^2, \qquad T = \frac{4k_1 k_2}{(k_1 + k_2)^2}.
+\]
+
+
+
+\end{document}
+

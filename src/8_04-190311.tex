@@ -1,0 +1,62 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{March 11, 2019}
+\subsection{More properties about the Wavefunction}
+More generally, if we let \(k(x) = \frac{\sqrt{2m (E - V(x))}}{\hbar}\), then we have that a particular \(x\) is \vocab{classically allowed} if \(k(x)\) is real, i.e.\ if \(V(x) < E\), and \(x\) is \vocab{classically forbidden} if \(k(x)\) is imaginary, i.e.\ if \(V(x) > E\). These correspond to sinusoidal and exponential wavefunctions respectively.
+
+\subsection{General Properties of the Spectrum of Eigenvalues}
+Consider what happens to the wavefunction for different possible eigenvalues \(E\). First, note that if we have \(E < \min V(x)\), then \(\psi = 0\).
+
+Let's consider the case where \(V(x) \to \infty\) for \(x \to \pm \infty\). Suppose we wish to check whether some \(E\) can be in the spectrum. Suppose \(V(x) = E\) for \(x = x_1\) and \(x = x_2\).
+\begin{center}
+	\begin{asy}
+		import olympiad;
+		import cse5;
+		import graph;
+
+		real f(real x){ return sqrt(2 * (x + 1)^2 + 3) - 3; }
+
+		D((-5, 0)--MP("x", (4, 0), dir(0)), gray(0.5), Arrows(TeXHead));
+		D((0, -2)--MP("V(x)", (0, f(3)), dir(90)), gray(0.5), Arrows(TeXHead));
+
+		path E = (-5, -0.5)--(4, -0.5),
+			g = graph(f, -5, 3);
+
+		D(g);
+
+		D(IP(E, g)--MP("x_1", foot(IP(E, g), (-1, 0), (1, 0)), dir(90)), gray(0.3));
+		D(OP(E, g)--MP("x_2", foot(OP(E, g), (-1, 0), (1, 0)), dir(90)), gray(0.3));
+
+		D(L(IP(E, g), OP(E, g), 0.3, 0.3), n_blue + linewidth(1));
+		MP("E", OP(E, g) + (0.7, 0), dir(-45), n_blue); // this is so jank
+	\end{asy}
+\end{center}
+We can try to graphically find a wavefunction for this just based on the concavity and convexity. For a given \TODO[behaves exponentially]
+% behaves exponentially
+
+
+For the case where \(V(x) \to V_{\pm \infty}\) as \(x \to \pm\infty\), we will assume without loss of generality that \(V_{+\infty} < V_{-\infty}\). Then we have that:
+\begin{itemize}
+	\item If \(E < V_{+\infty}\), \(E < V_{-\infty}\), then there is a discrete energy spectrum, and \(\psi\) oscillates within the points where \(V(x) = E\) while behaving exponentially beyond these points.
+	\item If \(V_{+\infty} < E < V_{-\infty}\) or \(E > V_{-\infty}\), then there is a continuous energy spectrum, and \(\psi\) oscillates and behaves exponentially in their respective intervals.
+\end{itemize}
+We call the states first case the \vocab{bounded states} and the second case the \vocab{scattered states}.
+
+\subsection{Summary of What We Know}
+We have that the wavefunction \(\psi\) is a complete description of the state of a physical system, and \(\abs{\psi}^2\) is the probability density of a particular state. These wavefunctions form a vector space called Hilbert space. Physical observables \(A\) correspond to Hermitian operators, whose possible measurements are eigenvalues of the operator. Moreover, measuring the observable collapses the wavefunction to one of the eigenfunctions, and yields the respective eigenvalue. In particular,
+\[
+	P(\text{we observe the eigenvalue \(a_n\) of \(\psi_n\)}) = \abs{\braket{\psi}{\psi_n}}.
+\]
+We can then determine how the system will evolve throughout time with the Schr\"odinger equation
+\[
+	\hat H \psi = i\hbar \dv{}{t} \psi,
+\]
+where \(\hat H = \frac{\hat p^2}{2m} + \hat V\) is the Hamiltonian operator.
+
+
+
+
+
+\end{document}

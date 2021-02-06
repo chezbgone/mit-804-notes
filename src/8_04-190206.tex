@@ -1,0 +1,351 @@
+\documentclass{standalone}
+\usepackage{chez}
+
+\begin{document}
+\section{February 06, 2019}
+\subsection{Logistics}
+The course is heavily based off of 8.03\footnote{oops}.
+Going to recitation is recommended but not mandatory.
+PSets are due Thursdays at 5PM, once per week, and at some point
+in the middle of the course it will change to Fridays at 5PM.\@
+This class is known for lengthy PSets because of the computational nature
+of the class, so start them early.
+There will be two midterms and a final.
+Grades are weighted as follows:
+\begin{itemize}
+	\item Problem Sets: 20\%
+	\item Midterm 1: 20\%
+	\item Midterm 2: 25\%
+	\item Final: 35\%
+\end{itemize}
+There are no textbooks required for this course,
+but there are a few recommended texts.
+
+Lectures will be on the blackboard, no slides.
+The advantage to this is that the lecture will be
+so slow that students can follow along.
+As per MIT-time, we will typically start lectures at 14:35 and end at 15:55.
+
+Also, if you're reading these notes, and want to skip
+the experimental motivation, you can skip to
+this \hyperref[subsect:rigorous]{part} where we start doing things rigorously.
+
+\subsection{Introduction/Motivation}
+Quantum mechanics was discovered because people started to realize that
+classical physics was not a sufficient description of our universe.
+We will discuss some of the experiments that display this
+to motivate quantum mechanics.
+
+\iffalse
+\begin{itemize}
+	\item blackbody radiation
+	\item double slit
+	\item photoelectric effect
+	\item Compton effect
+\end{itemize}
+\fi
+
+\subsubsection{Photoelectric Effect}
+Consider the experiment where we shine light on a metallic surface. Then, it turns out that this surface emits elections, called \vocab{photoelectrons}. This was discovered by Hertz in 1887. The energies of the photoelectrons range from \(0\) to some maximum.
+
+In 1916, Millikan performed an experiment with the following setup:
+\begin{center}
+	\begin{asy}
+		import cse5;
+		size(5cm);
+		
+		guide squiggly(path g, real stepsize, real slope=45){
+			real len = arclength(g);
+			real step = len / round(len / stepsize);
+			guide squig;
+			for (real u = 0; u < len; u += step){
+				real a = arctime(g, u);
+				real b = arctime(g, u + step / 2);
+				pair p = point(g, a);
+				pair q = point(g, b);
+				pair np = unit( rotate(slope) * dir(g,a));
+				pair nq = unit( rotate(0 - slope) * dir(g,b));
+				squig = squig .. p{np} .. q{nq};
+			}
+			squig = squig .. point(g, length(g)){unit(rotate(slope)*dir(g,length(g)))};
+			return squig;
+		}
+
+		D(box((-3.7, 9), (-2.7, 5)));
+		D(box((3.7, 9), (2.7, 5)));
+		D((-3.7, 7)--(-6, 7)--(-6, 0)--(-0.5, 0));
+		D((3.7, 7)--(6, 7)--(6, 0)--(0.5, 0));
+		D((-0.5, 0.6)--(-0.5, -0.6));
+		D((0.5, 1)--(0.5, -1));
+
+		filldraw(CR((6, 3.5), 0.5), white, black);
+		D(shift(6, 3.5)*(dir(-135)--dir(45)), EndArrow(TeXHead));
+		MP("I", (6.7, 3.5), dir(0));
+
+		D(squiggly((-0.5, 9.2)--(-2.3, 7.1), 0.5, 30)--(-2.4, 7), EndArrow(TeXHead));
+		label("light", (-0.5, 9.2), dir(60));
+		D((-2.4, 6.5)--(-0.4, 6.5), EndArrow(TeXHead));
+		label("\(\mathrm{e^-}\)", (-0.4, 6.5), dir(-30));
+
+		MP("V", (0, 1));
+		MP("C", (-3.2, 5), dir(-90));
+		MP("A", (3.2, 5), dir(-90));
+	\end{asy}
+\end{center}
+
+It was discovered that if \(V > 0\), then the electrons \(\mathrm{e^-}\) were attracted to A, and if \(V < 0\), they were repelled. If the stopping potential is \(V = V_0\), and we plot the stopping potential with respect to the current measured, we get something like this:
+\begin{center}
+	\begin{asy}
+		import cse5;
+		import graph;
+
+		D((-3, 0)--(5, 0), gray(0.6), Arrows(TeXHead));
+		D((0, 0)--(0, 4), gray(0.6), EndArrow(TeXHead));
+
+		D(graph(new real(real t){ return 1.2 * sqrt(t + 2); }, -2, 5),
+			EndArrow(TeXHead)
+		);
+
+		MP("I", (0, 4), dir(0));
+		MP("V", (5, 0), dir(90));
+		MP("V_0", (-2, 0), dir(-90));
+	\end{asy}
+\end{center}
+
+We know that the energy of the electron is
+\begin{align*}
+	K_{\text{max}} &= e V_0 \\
+		&= \half m_e V_{\text{max}}^2
+\end{align*}
+It was found that if we changed the intensity of the light, the stopping potential does not change with it, which is not what classical mechanics predicts. Other observations include:
+\begin{itemize}
+	\item \(K_{\text{max}}\) is independent of intensity of the light.
+	\item \(K_{\text{max}}\) increases with frequency \(\nu\).
+	\item There is a minimum frequency \(\nu_0\) below which no \(\mathrm{e^-}\) are detected.
+\end{itemize}
+
+In 1905, Einstein realized the following:
+\begin{itemize}
+	\item Light comes in photons with energy \(E = h \nu\), where \(h\) is Planck's constant.
+	\item Electrons are bound to metal with some binding energy \(W \geq W_0\).
+	\item Each photoelectron is ejected by one photon.
+	\item The energy of the ejected electron is \(K = h\nu - W\), and therefore \(K_{\text{max}} = h\nu - W_0\).
+\end{itemize}
+
+Overall, this experiment shows that:
+\begin{itemize}
+	\item Increasing the intensity of the light only increases the number of photoelectrons.
+	\item The minimum frequency \(\nu_0\) satisfies
+	\[
+		K_{\text{max}} = h\nu - W_0 = h (\nu - \nu_0) \implies \nu_0 = \frac{W_0}{h}.
+	\]
+\end{itemize}
+
+\subsubsection{Compton Effect}
+Consider the experiment where we shine an x-ray into a graphite object. It is known that an electron is emitted, and the x-rays are scattered at many angles. We will place a detector that detects photons at a fixed angle \(\theta\) for now.
+\begin{center}
+	\begin{asy}
+		import cse5;
+		size(10cm);
+
+		guide squiggly(path g, real stepsize, real slope=45){
+			real len = arclength(g);
+			real step = len / round(len / stepsize);
+			guide squig;
+			for (real u = 0; u < len; u += step){
+					real a = arctime(g, u);
+					real b = arctime(g, u + step / 2);
+					pair p = point(g, a);
+					pair q = point(g, b);
+					pair np = unit( rotate(slope) * dir(g,a));
+					pair nq = unit( rotate(0 - slope) * dir(g,b));
+					squig = squig .. p{np} .. q{nq};
+			}
+			squig = squig .. point(g, length(g)){unit(rotate(slope)*dir(g,length(g)))};
+			return squig;
+		}
+
+		D(squiggly((-1.5, 0)--(0, 0), 0.1, 30));
+		D(squiggly((0, 0)--(0.7 * dir(60)), 0.1, 30));
+		D((0, 0)--dir(-30), EndArrow(TeXHead));
+		D((0, 0)--(0.5, 0), gray(0.6));
+
+		D(shift(0.7 * dir(60)) * rotate(60) * ((0, -0.1)--(0, 0.1)));
+		D(CP(0.62 * dir(60), shift(0.7 * dir(60)) * rotate(60) * (0, 0.1), 0, 120));
+
+		filldraw(box((-0.1, -0.1), (0.1, 0.1)), white, black);
+
+		MA("\theta", dir(0), (0, 0), dir(60), 0.2);
+		//MA("\varphi", dir(-30), (0, 0), dir(0), 0.3);
+
+		label(minipage("\centering x-ray\\\(\nu_0, \lambda_0\)"), (-1.5, 0), dir(90));
+		label("detector", 0.7 * dir(60) + (0.1, 0), dir(0));
+		MP("e^-", dir(-30), dir(0));
+	\end{asy}
+\end{center}
+
+Classically, we expect all of the detected photons to have wavelength the same as the original photons. However, if (for a specific \(\theta\)) we measure the distribution of photons with each wavelength, we get the following:
+\begin{center}
+	\begin{asy}
+		import cse5;
+		size(5cm);
+
+		D((0, 0)--(0, 5), gray(0.4), EndArrow(TeXHead));
+		D((0, 0)--(7, 0), gray(0.4), EndArrow(TeXHead));
+		
+		real e = 2.718281828;
+		D(graph(new real(real t){
+			return 3 e^(-3(t - 2)^2);
+		}, 0.5, 3.4));
+		D((2, 0.1)--MP("\lambda_0", (2, -0.1), dir(-90)));
+
+		MP("I", (0, 5), dir(45));
+		MP("\lambda", (7, 0), dir(45));
+		MP("\theta = 0^\circ", (6, 5), dir(-135));
+	\end{asy}
+	\quad
+	\begin{asy}
+		import cse5;
+		size(5cm);
+
+		D((0, 0)--(0, 5), gray(0.4), EndArrow(TeXHead));
+		D((0, 0)--(7, 0), gray(0.4), EndArrow(TeXHead));
+		
+		D((1, 0)..(1.25, 0.1)..(1.5, 0.4)..(1.75, 1.5)..controls (1.825, 2.8)..(2, 3)..(2.3, 2.9)..controls (2.5, 2.9) and (2.7, 3.5)..(2.8, 3.7)--(2.8, 3.7)..(3, 1.8)..(3.8, 0.2)..(4, 0.1)..(4.5, 0));
+		D((2, 0.1)--MP("\lambda_0", (2, -0.1), dir(-90)));
+
+		MP("I", (0, 5), dir(45));
+		MP("\lambda", (7, 0), dir(45));
+		MP("\theta = 90^\circ", (6, 5), dir(-135));
+	\end{asy}
+
+	\begin{asy}
+		import cse5;
+		import graph;
+		size(5cm);
+
+		D((0, 0)--(0, 5), gray(0.4), EndArrow(TeXHead));
+		D((0, 0)--(7, 0), gray(0.4), EndArrow(TeXHead));
+		
+		D(graph(new real(real t){
+			real e = 2.718281828;
+			return 1.7 e^(-7(t - 2)^2) + 3 e^(-3(t - 3.2)^2);
+		}, 1, 5));
+		D((2, 0.1)--MP("\lambda_0", (2, -0.1), dir(-90)));
+
+		MP("I", (0, 5), dir(45));
+		MP("\lambda", (7, 0), dir(45));
+		MP("\theta = 135^\circ", (7, 5), dir(-135));
+	\end{asy}
+	\quad
+	\begin{asy}
+		import cse5;
+		import graph;
+		size(5cm);
+
+		D((0, 0)--(0, 5), gray(0.4), EndArrow(TeXHead));
+		D((0, 0)--(7, 0), gray(0.4), EndArrow(TeXHead));
+		
+		real e = 2.718281828;
+		D(graph(new real(real t){
+			return 2 e^(-5(t - 2)^2) + 3.5 e^(-2(t - 4.2)^2);
+		}, 1, 6));
+		D((2, 0.1)--MP("\lambda_0", (2, -0.1), dir(-90)));
+
+		MP("I", (0, 5), dir(45));
+		MP("\lambda", (7, 0), dir(45));
+		MP("\theta = 45^\circ", (7, 5), dir(-135));
+	\end{asy}
+\end{center}
+
+It is not clear how we get the second peak! Let's look at a more idealized version of the experiment. Let the incoming photon have energy \(E_0\) and momentum \(p_0\), the emitted electron have total energy \(E\), kinetic energy \(K\), and momentum \(p\), and the scattered photon have energy \(E_1\) and momentum \(p_1\).
+\begin{center}
+	\begin{asy}
+		import cse5;
+		size(10cm);
+
+		guide squiggly(path g, real stepsize, real slope=45){
+			real len = arclength(g);
+			real step = len / round(len / stepsize);
+			guide squig;
+			for (real u = 0; u < len; u += step){
+				real a = arctime(g, u);
+				real b = arctime(g, u + step / 2);
+				pair p = point(g, a);
+				pair q = point(g, b);
+				pair np = unit( rotate(slope) * dir(g,a));
+				pair nq = unit( rotate(0 - slope) * dir(g,b));
+				squig = squig .. p{np} .. q{nq};
+			}
+			squig = squig .. point(g, length(g)){unit(rotate(slope)*dir(g,length(g)))};
+			return squig;
+		}
+
+		D(squiggly((-1.5, 0)--(0, 0), 0.1, 30));
+		D(squiggly((0, 0)--dir(60), 0.1, 30)--(1.01 * dir(60)), EndArrow(TeXHead));
+		D((0, 0)--dir(-30), EndArrow(TeXHead));
+		D((0, 0)--(0.5, 0), gray(0.6));
+
+		filldraw(box((-0.1, -0.1), (0.1, 0.1)), white, black);
+
+		MA("\theta", dir(0), (0, 0), dir(60), 0.2);
+		MA("\varphi", dir(-30), (0, 0), dir(0), 0.3);
+
+		label("photon \(E_0, p_0\)", (-1.5, 0), dir(90));
+		label(minipage("\centering scattered photon\\\(E_0, p_0\)"), shift(-0.2, 0)*dir(60), dir(0));
+		MP("e^- \; K, E, p", dir(-30), dir(0));
+	\end{asy}
+\end{center}
+
+By conservation of momentum, we have
+\begin{align*}
+	p_0 &= p_1 \cos\theta + p \cos\varphi \\
+	p_1 \sin\theta &= p \sin\varphi.
+\end{align*}
+Subtracting \(p_1 \cos\theta\) in the first equation, squaring the equations and adding, we have
+\[
+	p_0^2 + p_1^2 - 2 p_0 p_1 \cos\theta = p^2. \label{eqn:compton-momentum}\tag{A}
+\]
+
+Now by conservation of energy, we have
+\[
+	E_0 + m_e c^2 = E_1 + \underbracket{K + m_e c^2}_E \implies E - m_e c^2 = E_0 - E_1. \label{eqn:compton-energy}\tag{B}
+\]
+
+From special relativity, we have that
+\[
+	E^2 = (pc)^2 + (mc^2)^2,
+\]
+and that for a photon, \(p = E/c = h/\lambda\).
+
+Multiplying \cref{eqn:compton-momentum} by \(c^2\), we have
+\[
+	E_0^2 + E_1^2 - 2E_0 E_1 \cos\theta = (pc)^2 = E^2 - (m_e c^2)^2.
+\]
+Squaring \cref{eqn:compton-energy}, we have
+\[
+	E^2 + (m_e c^2)^2 - 2E(m_e c^2) = E_0^2 + E_1^2 - 2E_0 E_1.
+\]
+Subtracting these two equations, we have
+\[
+	2E_0E_1(1 - \cos\theta) = 2E(m_e c^2) - 2(m_e c^2)^2.
+\]
+Since \(E = K + m_e c^2 = (E_0 - E_1) + m_e c^2\), this simplifies to
+\[
+	E_0E_1(1 - \cos\theta) = (E_0 - E_1)(m_e c^2).
+\]
+Therefore,
+\[
+	E_0 - E_1 = \frac{hc}{\lambda_0} - \frac{hc}{\lambda_1} = \frac{E_0E_1}{m_e c^2}(1 - \cos\theta) = \frac{h^2c^2}{\lambda_0 \lambda_1 m_e c^2} (1 - \cos\theta)
+		\implies \lambda_0 - \lambda_1 = \Delta \lambda = \frac{h}{m_e c^2}(1 - \cos\theta).
+\]
+
+
+
+
+
+
+
+
+\end{document}
+

@@ -1,0 +1,88 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{May 08, 2019}
+\subsection{Angular Part of Schr\"odinger Equation}
+Recall that when we had the time independent Schr\"odinger equation, we let \(\psi(r, \theta, \varphi) = R(r) \cdot Y(\theta, \varphi)\), and this yields
+\begin{align*}
+	\frac{1}{R} \dv{}{r} \parens*{r^2 \dv{R}{r}} - \frac{2mr^2}{\hbar^2} [V(r) - E] &= \ell(\ell + 1) \\
+	\frac{1}{Y} \brackets*{\frac{1}{\sin \theta} \pdv{}{\theta} \parens*{\sin\theta \pdv{Y}{\theta}} + \frac{1}{\sin^2\theta} \pddv{Y}{\varphi}} &= -\ell(\ell + 1).
+\end{align*}
+We solved this for \(\ell = 0\), i.e.\ for spherically symmetric solutions. Now suppose that \(\ell\) is any nonnegative integer. Let
+\[
+	Y(\theta, \varphi) = \Theta(\theta) \Phi(\varphi).
+\]
+We then get
+\begin{align*}
+	\frac{1}{\Theta} \brackets*{\sin\theta \dv{}{\theta} \parens*{\sin \theta \dv{\Theta}{\theta}} + \ell(\ell + 1) \sin^2 \theta} + \frac{1}{\Phi} \ddv{\Phi}{\varphi} = 0.
+\end{align*}
+The first term only depends on \(\theta\), and the second term only depends on \(\varphi\), so both must be a constant. Let the constant be \(m^2\). We get
+\begin{gather*}
+	\frac{1}{\Theta} \brackets*{\sin\theta \dv{}{\theta} \parens*{\sin \theta \dv{\Theta}{\theta}} + \ell(\ell + 1) \sin^2 \theta} = m^2 \\
+	\frac{1}{\Phi} \ddv{\Phi}{\varphi} = -m^2.
+\end{gather*}
+
+The second equation gives us \(\Phi(\varphi) = \exp(i m \varphi)\), implying that \(m = 0, 1, 2, \dots\) since \(\Phi\) has period \(2\pi\).
+
+The first equation is hard to solve. We know (from math) that the solution is
+\[
+	\Theta(\theta) = A P_{\ell m}(\cos \theta),
+\]
+where \(P_{\ell m}\) are the \vocab{associated Legendre function}, defined by
+\[
+	P_{\ell m}(x) = (1 - x^2)^{\abs{m}/2} \dnv{}{x}{\abs m} P_\ell(x),
+\]
+where \(P_\ell\) is the \(\ell\)th \vocab{Legendre polynomial}, defined by
+\[
+	P_\ell(x) = \frac{1}{2^\ell \ell!} \dnv{}{x}{\ell} (x^2 - 1)^\ell.
+\]
+
+Overall, this gives the \vocab{spherical harmonics} \(Y_{\ell m}(\theta, \varphi) = A \exp(i m \varphi) P_{\ell m}(\cos \theta)\). Here are some values of \(P_{\ell m}\) for small \(\ell\) and \(m\).
+\begin{align*}
+	P_{1, 1}(\cos\theta) &= \sin\theta &
+		P_{1, 0}(\cos\theta) &= \cos\theta
+\end{align*}
+\begin{align*}
+	P_{2, 2}(\cos\theta) &= 3\sin^2\theta &
+		P_{2, 1}(\cos\theta) &= 3\sin\theta \cos\theta &
+		P_{2, 0}(\cos\theta) &= \half (3 \cos^2\theta - 1).
+\end{align*}
+
+\subsubsection{Relationship between \texorpdfstring{\(Y_{\ell m}\)}{Ylm} and \texorpdfstring{\(\hat L^2\)}{L2}, \texorpdfstring{\(\hat L_z\)}{Lz}}
+Writing \(\hat L^2\) in spherical coordinates, we have
+\[
+	\hat L^2 = -\hbar^2 \brackets*{\frac{1}{\sin\theta} \pdv{}{\theta} \parens*{\sin\theta \pdv{}{\theta}} + \frac{1}{\sin^2 \theta} \pddv{}{\varphi}}.
+\]
+We know that \(\psi_{\ell m}\) is an eigenvalue for \(\hat L^2\), so we have
+\begin{align*}
+	\hat L^2 \psi_{\ell m} &= \hbar^2 \ell (\ell + 1) \psi_{\ell m} \\
+	-\hbar^2 \brackets*{
+		\frac{1}{\sin\theta} \pdv{}{\theta} \parens*{\sin\theta \pdv{\psi_{\ell m}}{\theta}}
+		+ \frac{1}{\sin^2 \theta} \pddv{\psi_{\ell m}}{\varphi}
+	} &= \hbar^2 \ell(\ell + 1) \psi_{\ell m} \\
+	\frac{1}{Y_{\ell m}} \brackets*{
+		\frac{1}{\sin\theta} \pdv{}{\theta} \parens*{\sin\theta \pdv{\psi_{\ell m}}{\theta}}
+		+ \frac{1}{\sin^2 \theta} \pddv{\psi_{\ell m}}{\varphi}
+	} &= -\ell(\ell + 1).
+\end{align*}
+This is precisely the equation for the angular momentum, so the eigenvalues are \(\psi_{\ell m} = Y_{\ell m}\).
+
+\subsection{Radial Part of Schr\"odinger Equation}
+Recall that we let \(u(r) = r \cdot R(r)\). Then we have
+\[
+	-\frac{\hbar^2}{2m} \ddv{u}{r} + \brackets*{V + \frac{\hbar^2}{2m} \frac{\ell(\ell + 1)}{r^2}} u = Eu.
+\]
+We call \(V_{\text{eff}} = V + \frac{\hbar^2}{2m} \frac{\ell(\ell + 1)}{r^2}\) the \vocab{effective potential}, where the second term of the effective potential is called the \vocab{centrifugal term}. The centrifugal term is nonzero for \(\ell > 0\).
+
+We can rewrite our equation as
+\[
+	-\frac{\hbar^2}{2m} \ddv{u}{r} + V_{\text{eff}} u = Eu,
+\]
+but it is difficult to solve without knowing a specific \(V_{\text{eff}}\).
+
+
+
+
+\end{document}
+

@@ -1,0 +1,11 @@
+*.log
+*.aux
+*.fdb_latexmk
+*.fls
+*.out
+*.toc
+*.pre
+*.pdf
+
+*.asy
+8_04-notes-*.tex

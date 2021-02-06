@@ -1,0 +1,91 @@
+\documentclass{standalone}
+\usepackage{chez}
+
+\begin{document}
+\section{February 11, 2019}
+\subsection{More Experiments}
+\subsubsection{Blackbody Spectrum}
+We know that matter radiates electromagnetic radiation at different frequencies \(\nu\) depending on its temperature \(T\). In particular, if we plot the spectral energy density with respect to frequency, we get
+
+\begin{center}
+	\begin{asy}
+		import cse5;
+		import graph;
+		size(5cm);
+
+		D((0, 0)--(0, 5), gray(0.4), EndArrow(TeXHead));
+		D((0, 0)--(7, 0), gray(0.4), EndArrow(TeXHead));
+		
+		real e = 2.718281828;
+		real T1(real t){ return t^3/(e^t - 1); }
+		real T2(real t){ return t^3/(e^(t/1.4) - 1); }
+		D(graph(T1, 0.001, 7));
+		D(graph(T2, 0.001, 7));
+
+		MP("T_1", (5, T1(5)), dir(70));
+		MP("T_2", (6, T2(6)), dir(70));
+
+		MP("W_\nu", (0, 5), dir(45));
+		MP("\nu", (7, 0), dir(45));
+	\end{asy}
+\end{center}
+We have that the maximum \(\nu\) value is linear with \(T\) and the integral with respect to the curve is proportional to \(T^4\).
+
+Let's try to explain this with classical physics. Consider a metal cube with sidelength \(L\) and temperature \(T\). We will decompose the radiation field into a collection of standing waves. In particular, we will calculate the energy per mode and the number of modes, and use this to calculate the total energy.
+
+Suppose that the electrons that generate the waves can be described as a harmonic oscillator with frequency \(\nu\) and energy \(E\). By statistical physics, we have that Boltzmann distribution describes the probability distribution of the energy as
+\[
+	P(E) = \frac{e^{-E/k_B T}}{k_B T},
+\]
+where \(k_B\) is the Boltzmann constant. To get the average energy, we compute
+\[
+	\angles E = \int_0^\infty E \cdot P(E) \,dE = k_B T.
+\]
+Note that we we omitted the division because the integral of \(P(E)\) is just \(1\) since it is a probability distribution. Therefore, the average energy per mode is \(k_B T\).
+
+To calculate the number of modes in \(k\) space, we have
+\[
+	k = \frac{2\pi}{\lambda} = \frac{2\pi\nu}{c}.
+\]
+Consider a cube lattice of points separated with distance \(\pi/L\). The number of modes with wavenumber at most \(k\) is
+\[
+	M = \left.\parens*{\frac{1}{8} \cdot \frac{4\pi}{3} \cdot R^3} \middle/ \parens*{\frac{\pi}{L}}^3\right. = \frac{4 \pi L^3 \nu^3}{3c^2},
+\]
+where we used \(k = \frac{2\pi \nu}{c}\) in the second step. This gives the node density (after multiplying by \(2\) to account for polarization)
+\[
+	N(\nu) = 2\dv{M}{\nu} = \frac{8\pi L^3 \nu^2}{c^3}.
+\]
+More generally, we can replace \(L^3\) with the volume \(V\).
+
+Multiplying the number of modes by the average energy per mode and then dividing by volume for density, we get
+\[
+	W_\nu(\nu) = \frac{8\pi k_B T \nu^2}{c^3}.
+\]
+This is the classical result. But we know this is wrong because if we take the total energy,
+\[
+	W(T) = \int_0^\infty W_\nu(T) \,d\nu = \infty,
+\]
+which contradicts the Stefan-Boltzmann law.
+
+The problem is that we assumed that the electrons that generate the waves could be described as harmonic oscillators. In particular, we assumed that the electrons' energy are described by the Boltzmann distribution, which is continuous. However, electrons only have discrete energies \(E_m = h \cdot \nu \cdot m\). Then we have
+\[
+	\angles E = \left.\brackets*{
+		\sum_{m = 0}^\infty E_m \cdot P(E_m)
+	}\middle/\brackets*{
+		\sum_{m = 0}^\infty P(E_m)
+	}\right. = \left.\brackets*{
+		\sum_{m = 0}^\infty mh\nu \exp(-\beta mh\nu)
+	}\middle/\brackets*{
+		\sum_{m = 0}^\infty \exp(-\beta mh\nu)
+	}\right. = \frac{h\nu}{\exp(h\nu/k_B T) - 1}.
+\]
+This gives
+\[
+	W_\nu = \frac{8\pi \nu^2}{c^3} \cdot \frac{h\nu}{\exp(h\nu/k_B T) - 1},
+\]
+which fits our data.
+
+
+
+\end{document}
+

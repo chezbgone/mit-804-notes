@@ -1,0 +1,87 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{March 20, 2019}
+Consider the finite square well with potential \(V(x) = \begin{cases} -V_0 & \abs x < a \\ 0 & \text{otherwise} \end{cases}\). Suppose we have an energy \(-V_0 < E < 0\).
+
+Consider the region where \(x < -a\). By the Schr\"odinger equation,
+\[
+	-\frac{\hbar^2}{2m} \ddv{\psi(x)}{x} = E\psi(x) \implies \psi'' = \alpha^2 \psi, \qquad \text{where \(\alpha = \frac{\sqrt{-2mE}}{\hbar}\)}.
+\]
+Then, the general solution in this region is
+\[
+	\psi(x) = A e^{-\alpha x} + B e^{\alpha x}.
+\]
+Since \(\psi\) must be normalizable, we must have \(A = 0\), and \(\boxed{\psi(x) = B e^{\alpha x}}\).  For the region where \(a < x\), the situation is similar to when \(x < -a\), and we have the general solution
+\[
+	\boxed{\psi(x) = F e^{-\alpha x}}.
+\]
+
+In the region where \(-a < x < a\), we have
+\[
+	-\frac{\hbar^2}{2m} \ddv{\psi(x)}{x} - V_0 \psi(x) = E\psi(x) \implies \psi'' = -k^2 \psi, \qquad \text{where \(k = \frac{\sqrt{2m(E + V_0)}}{\hbar}\)}.
+\]
+The general solution for this is
+\[
+	\boxed{\psi(x) = C \sin kx + D \cos kx}.
+\]
+
+Now we have to patch these solutions together. To do this, we will use the fact that \(\psi\) and \(\psi'\) are continuous, and also the fact that \([\hat H, \hat \pi] = 0\). We will look for the even solutions. We have
+\[
+	\psi_{\text{even}}(x) = \begin{cases}
+		F e^{\alpha x} & x < -a \\
+		D \cos kx & -a < x < a \\
+		F e^{-\alpha x} & x > a.
+	\end{cases}
+\]
+Now we check the boundary. At \(x = a\), we have
+\begin{align*}
+	\psi(a) &= F e^{-\alpha a} = D \cos ka \\
+	\psi'(a) &= -\alpha F e^{-\alpha a} = -kD \sin ka.
+\end{align*}
+Dividing, we have
+\[
+	\alpha = k \tan ka.
+\]
+
+Letting \(p = ka\) and \(q = \alpha a\), we can rewrite the equation as
+\[
+	q = p \tan p.
+\]
+We also know that
+\[
+	p^2 + q^2 = a^2 \cdot \frac{2mV_0}{\hbar^2} \eqqcolon R_0^2.
+\]
+
+If we plot these two equations, we get something like the following:
+\begin{center}
+	\begin{asy}
+		import cse5;
+		size(6cm);
+
+		real xmin = 0, xmax = 12;
+		real ymin = 0, ymax = 12;
+		real pi = 4 * atan(1);
+		real eps = 0.0001;
+
+		real ptanp(real p){ return p * tan(p); }
+		D(graph(ptanp, 0, pi/2 - eps), n_orange);
+		D(graph(ptanp, pi + eps, 3 * pi/2 - eps), n_orange);
+		D(graph(ptanp, 2 * pi + eps, 5 * pi/2 - eps), n_orange);
+		D(graph(ptanp, 3 * pi + eps, 7 * pi/2 - eps), n_orange);
+		D(graph(ptanp, 4 * pi + eps, 9 * pi/2 - eps), n_orange);
+
+		real R0 = 10;
+		D(CR((0, 0), R0, 0, 90), n_blue);
+
+		clip(box((xmin, ymin), (xmax, ymax)));
+		D((xmin, 0)--MP("p", (xmax, 0), dir(0)), gray(0.6), EndArrow(TeXHead));
+		D((0, ymin)--MP("q", (0, ymax), dir(90)), gray(0.6), EndArrow(TeXHead));
+	\end{asy}
+\end{center}
+The blue curve is the equation \(p^2 + q^2 = R_0^2\), and the orange curves are the equation \(q = p \tan p\). We take the intersection points to be the solutions.
+
+
+\end{document}
+

@@ -1,0 +1,48 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{February 19, 2019}
+Suppose that we were to perform a variation of the double-slit experiment with electrons, but we put light detectors (emit photons and see which ones reflect) on each of the slits in attempts to see which slit the electrons go through. It turns out that the distribution returns to the sum of the two distributions, and there is no interference.
+
+If we reduce the intensity of the light, the interference pattern slowly comes back. However, in this case, we do not have enough photons to detect all of the electrons, and it turns out that the electrons that are missed are the ones that form the interference pattern.
+
+If we increase the wavelength in attempt to minimize the impact the photons have on the electrons, we will see the interference pattern come back, but when the wavelength is close to the distance between the slits, we lose the information about which slit it goes through.
+
+In particular, if \(\Delta p\) is small then we get a large \(\Delta x\), and if \(\Delta p\) is large then we get a small \(\Delta x\). This is called \vocab{Heisenberg's Uncertainty Principle}, which states that
+\[
+	\Delta x \cdot \Delta p \geq \frac{\hbar}{2}.
+\]
+
+\subsection{Let's Actually Do Things Rigorously}\label{subsect:rigorous}
+\subsubsection{Wavefunctions}
+Recall that we can describe particles by considering them to be waves. We do this by assigning a wavefunction \(\psi\) to every system. In contrast to classical mechanics, where the configuration of a system is fully given by \(\vec x\) and \(\vec p\), the configuration of a system is fully given by \(\psi(\vec x, t)\). Moreover, in quantum mechanics the state evolves through Schr\"odinger's equation, as opposed to Newton's laws. One last difference is that quantum mechanics is probabilistic, as opposed to deterministic in classical mechanics.
+\begin{definition}
+	A \vocab{wavefunction} is a complex function \(\psi\) that describes the state of a quantum system.
+\end{definition}
+
+For now let's consider one dimensional wavefunctions for a single particle, i.e.\ ones of the form \(\psi(x, t)\). We can relate the wavefunction to a probability density by taking the norm of the wavefunction squared:
+\[
+	P(x, t) = \abs{\psi(x, t)}^2.
+\]
+Since the probability density must integrate to \(1\) over all points, we can find the units of the wavefunction to be
+\[
+	1 = \int_\RR \abs{\psi(x)}^2 \,dx \implies [\psi] = \frac{1}{[\mathsf L]}.
+\]
+
+\begin{example}
+	Let \(k = \frac{2\pi}{\lambda}\) for some fixed \(\lambda\). Consider the plane wave described by
+	\[
+		\psi(x, t) = e^{ikx}.
+	\]
+	By de Broglie, we have \(\lambda = \frac{h}{p}\) and \(p = \hbar k\). This means \(\Delta p = 0\), and by uncertainty we have that \(\Delta x\) is unbounded. Alternatively, note that \(\abs{\psi(x, t)} = 1\) for all \(x\). This means that \(\psi\) is not normalizable. We typically fix this by saying that \(\psi\) goes to \(0\) outside of a certain region.
+\end{example}
+
+
+
+
+
+
+
+\end{document}
+

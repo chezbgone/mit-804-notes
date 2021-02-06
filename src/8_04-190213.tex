@@ -1,0 +1,57 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{February 13, 2018}
+\subsection{Last Few Experiments}
+Recall that the energy of a photon is given by \(E = h \nu\) and the momentum is given by \(p = E/c = h/\lambda\). In 1924, de Broglie rewrote the momentum equation as \(\lambda = h/p\). For all particles, we call this value the \vocab{de Broglie wavelength} of the particle.
+
+In the Bohr model of the atom, we have a nucleus with electrons orbiting it in circular orbits bound by Coulombic attraction from the protons. Moreover, to explain the discrete values of energy that the atom omits, we say that the bound electrons are on discrete orbits.
+
+Considering the orbital angular momentum \(L = rp = rmv\). This is equal to \(n \frac{h}{2\pi}\). Since the value \(\frac{h}{2\pi}\) appears a lot in quantum mechanics, we will call this \(\hbar = \frac{h}{2\pi}\). Using the de Broglie wavelength, we have
+\[
+	2\pi r = n \cdot \frac{h}{p} \implies L = rp = \frac{nh}{2\pi} = n\hbar.
+\]
+
+Let's apply this to atoms that have one electron orbiting it. Suppose that there are \(Z\) protons in the nucleus. To find the radius \(r\) and energy \(E\), we use Coulomb's law to get
+\[
+	-\frac{Ze^2}{r^2} = -\frac{mv^2}{r} \implies mv^2r = Ze^2.
+\]
+Since \(L = rmv = n\hbar\), we have for the \(n\)th orbital radius that
+\[
+	v = \frac{n\hbar}{mr} \implies r_n = \frac{n^2}{Z} \parens*{\frac{\hbar^2}{m \cdot e^2}} = a_0 \frac{n^2}{Z},
+\]
+where \(a_0 = \frac{\hbar^2}{me^2}\) is the \vocab{Bohr radius}, approximately \(0.5\AA\). Note that this tells us that the \(n\)th electron radius scales with \(1/n^2\).
+
+To find the energy, we have
+\[
+	E_n = K + V = \half mv^2 - \frac{Ze^2}{r}.
+\]
+Since \(mv^2 r = Ze^2\), we have
+\[
+	E_n = -\half \frac{Ze^2}{r} = -\frac{1}{n^2} \frac{Z^2 e^2}{2a_0}.
+\]
+We can also write this as
+\[
+	E_n = -\half \parens*{\frac{e^2}{\hbar c}}^2 mc^2 \parens*{Z^2}{n^2}.
+\]
+The constant \(\frac{e^2}{\hbar c}\) is called the \vocab{Fine structure constant}, and is approximately \(\frac{1}{137}\).
+
+For a hydrogen atom, \(Z = 1\) and \(E_n = -13.6\mathrm{eV} \cdot \frac{1}{n^2}\). This agrees with the measurements we make.
+
+\subsection{Double-slit Experiment}
+Suppose we have a plane with two slits that will let large particles (like bullets) through. Behind the plane is a detector, which will detect at which points the particles hit the detector. We get that if one slit is open, then the distribution of particles will be Gaussian. If both slits are open, then we can just take the sum of the two distributions.
+
+If we do the same experiment with light instead of large particles, then there is an interference pattern when we have both slits open. A similar thing happens when we send electrons through the slits. Even if we send the electrons through one by one, there is an interference pattern. The only explanation for this is that the electrons must act like a wave.
+
+%Suppose we have a plane with two slits a distance of \(d\) apart in it that will let light through. Behind the plane, a distance of \(D\) away is a detector. Let \(x = 0\) be the point at the height between the two slits. Let the waves 
+
+
+
+
+
+
+
+
+\end{document}
+

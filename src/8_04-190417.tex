@@ -1,0 +1,44 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{April 17, 2019}
+Now consider the step potential
+\[
+	V(x) = \begin{cases}
+		0 & x \leq 0 \\
+		V_0 & x > 0
+	\end{cases}
+\]
+again, with \(E < V_0\). Let \(E = \frac{\hbar^2 k_1^2}{2m}\) and \(V_0 - E = \frac{k^2 \alpha^2}{2m}\). For the two regions \(x \leq 0\) and \(x > 0\), we have the general solutions
+\begin{align*}
+	\psi(x) &= A_0 e^{ik_1 x} + A e^{-ik_1 x} \\
+	\psi(x) &= B_0 e^{-\alpha x}.
+\end{align*}
+This gives
+\begin{align*}
+	A &= \parens*{\frac{ik + \alpha}{ik - \alpha}} A_0 \\
+	B &= \parens*{\frac{2ik}{ik - \alpha}} A_0.
+\end{align*}
+
+Something interesting to note is that in order to establish that the particle is actually in the forbidden region, we must have resolving power \(\Delta x < \half\). By Heisenberg Uncertainty, we have
+\[
+	\Delta p \geq \frac{\hbar}{\Delta x} \geq \hbar\alpha.
+\]
+Therefore, we are given the particle an energy of
+\[
+	\frac{\abs{\Delta p}^2}{2m} \geq \frac{\hbar^2 \alpha^2}{2m} = V_0 - E.
+\]
+
+\subsection{Potential Barrier}
+Consider the potential
+\[
+	V(x) = \begin{cases}
+		0 & x < 0 \\
+		V_0 & 0 < x < L \\
+		0 & L < x.
+	\end{cases}
+\]
+
+
+\end{document}

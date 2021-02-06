@@ -1,0 +1,116 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{March 06, 2019}
+\subsection{More on the Solutions for the Infinite Square Well}
+If we plot the eigenstates, we get
+\begin{center}
+	\begin{asy}
+		import cse5;
+		import graph;
+		size(5cm);
+
+		real pi = 3.14159265;
+		real a = 1, n = 1, eps = 0.1;
+		D((0, 0)--(a + eps, 0), EndArrow(TeXHead));
+		D((0, -0.6)--(0, 0.6), Arrows(TeXHead));
+
+		real phin(real x){
+			return 0.3 * sqrt(2.0/a) * sin(n * pi * x/a);
+		}
+		D(graph(phin, 0, a));
+
+		MP("x", (a + eps, 0), dir(0));
+		D((a, eps/4)--MP("a", (a, -eps/4), dir(-90)));
+		MP("0", (0, 0), dir(180));
+	\end{asy}
+	\begin{asy}
+		import cse5;
+		import graph;
+		size(5cm);
+
+		real pi = 3.14159265;
+		real a = 1, n = 2, eps = 0.1;
+		D((0, 0)--(a + eps, 0), EndArrow(TeXHead));
+		D((0, -0.6)--(0, 0.6), Arrows(TeXHead));
+
+		real phin(real x){
+			return 0.25 * sqrt(2.0/a) * sin(n * pi * x/a);
+		}
+		D(graph(phin, 0, a));
+
+		MP("x", (a + eps, 0), dir(0));
+		D((a, eps/4)--MP("a", (a, -eps/4), dir(-90)));
+		MP("0", (0, 0), dir(180));
+	\end{asy}
+	\begin{asy}
+		import cse5;
+		import graph;
+		size(5cm);
+
+		real pi = 3.14159265;
+		real a = 1, n = 3, eps = 0.1;
+		D((0, 0)--(a + eps, 0), EndArrow(TeXHead));
+		D((0, -0.6)--(0, 0.6), Arrows(TeXHead));
+
+		real phin(real x){
+			return 0.2 * sqrt(2.0/a) * sin(n * pi * x/a);
+		}
+		D(graph(phin, 0, a));
+
+		MP("x", (a + eps, 0), dir(0));
+		D((a, eps/4)--MP("a", (a, -eps/4), dir(-90)));
+		MP("0", (0, 0), dir(180));
+	\end{asy}
+\end{center}
+
+Recall that, we know that \(\int \phi_m^*(x) \phi_n(x) \,dx = \delta_{mn}\), because they are the eigenstates of a Hermitian operator. Moreover, the \(\phi_m\) form a complete basis of Hilbert space.
+
+Moreover, all of the eigenfunctions are odd. To see why this is true, consider the \vocab{parity operator} \(\hat\pi \psi(x) = \psi(-x)\). The eigenvalues of \(\hat \pi\) are \(1\) and \(-1\), corresponding to even and odd functions respectively. Hence, we know that every wavefunction can be written as an even and an odd function. This makes sense because if we have some function \(\psi(x)\), we can consider
+\begin{align*}
+	\psi_+(x) &= \half (\psi(x) + \psi(-x)) \\
+	\psi_-(x) &= \half (\psi(x) - \psi(-x)),
+\end{align*}
+which are the even and odd functions respectively.
+
+\begin{proposition}
+	For the shifted infinite square well potential \(V(x) = \begin{cases}
+		0 & x \in [-a/2, a/2] \\
+		\infty & \text{otherwise},
+	\end{cases}\)
+	\[
+		[\hat H, \hat \pi] = 0.
+	\]
+\end{proposition}
+\begin{proof}
+	We have \(\hat H = \frac{\hat p^2}{2m} + V(x)\). It suffices to show that \([\hat p^2, \hat \pi] = 0\) and \([V(x), \hat \pi] = 0\). The first statement is true because \(\hat \pi\) commutes with the derivative operator, and the second statement is true because \(V(x)\) is even.
+\end{proof}
+
+
+\subsection{General Properties of the Wavefunction}
+We have the following properties of \(\psi(x)\):
+\begin{itemize}
+	\item \(\psi(x)\) is finite, because \(P(x) = \abs{\psi(x)}^2\).
+	\item \(\psi(x)\) is continuous
+	\item \(\psi'(x)\) is continuous if \(V(x)\) is continuous.
+\end{itemize}
+If we know something about \(V(x)\), then we can determine more properties of \(\psi(x)\). We can write the Schr\"odinger equation as
+\[
+	\psi''(x) + k^2(x) \psi(x) = 0,
+\]
+where \(k^2(x) = \frac{2m}{\hbar^2} (E - V(x))\). Note that if \(V(x) < E\), then we have \(\psi^{\prime\prime\prime}\) and \(\psi\) have opposite signs. Hence, in this case \(\psi\) is concave at \(x\). Conversely, if \(V(x) > E\), then \(\psi\) is convex at \(x\).
+
+In particular, if we have \(V(x) = V_0 < E\), then we have
+\[
+	\psi(x) = c_{_+} e^{i \kappa_0 x} + c_{_-} e^{-i \kappa_0 x}, \qquad \text{where} \qquad \kappa_0 = \parens*{\frac{2m}{\hbar^2} (E - V_0)}^{1/2}.
+\]
+
+In the other case, if \(V(x) = V_0 > E\), we have
+\[
+	\psi(x) = c_{_+} e^{\kappa_0 x} + c_{_-} e^{-\kappa_0 x},
+\]
+where \(\kappa_0\) is the same value as before. Note that this is classically forbidden. However, in quantum mechanics, this is allowed, and gives us quantum tunneling.
+
+\end{document}
+

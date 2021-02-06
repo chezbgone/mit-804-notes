@@ -1,0 +1,104 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{April 01, 2019}
+\subsection{Harmonic Oscillator}
+We will now analyze the harmonic oscillator, where the potential is
+\[
+	V(x) = \half kx^2.
+\]
+\begin{center}
+	\begin{asy}
+		import graph;
+		import cse5;
+		size(5cm);
+
+		real xmin = -2, xmax = -xmin;
+		real ymin = -0.25, ymax = 2;
+
+		real k = 0.9;
+		real V(real x){ return 0.5 * k * x^2; }
+
+		D((xmin, 0)--(xmax, 0), gray(0.7), Arrows(TeXHead));
+		D((0, ymin)--(0, ymax), gray(0.7), Arrows(TeXHead));
+		D(graph(V, xmin, xmax));
+
+	\end{asy}
+\end{center}
+This is interesting because this is the first order Taylor expansion of any small oscillation. We can derive this potential from the harmonic oscillator by considering Hooke's Law under classical mechanics.
+
+Using this potential in Schr\"odinger's equation, we get
+\[
+	-\frac{\hbar^2}{2m} \ddv{\psi}{x} + \half m \omega^2 x^2 \psi = E \psi,
+\]
+where we define \(\omega = \sqrt{\frac{k}{m}}\).
+
+There are two approaches to solving this. We can either use a power series, called the Sommerfeld method, or we can use ladder operators. We will first use a power series.
+
+\subsubsection{Algebraic Approach}
+Let's introduce the change of variables so that we are working with dimensionless variables:
+\[
+	y = \sqrt{\frac{m\omega}{\hbar}} x, \qquad \mathcal E = \frac{2E}{\hbar \omega} = \frac{E}{\half \hbar \omega}.
+\]
+Then we have the equation
+\[
+	\ddv{\psi(y)}{y} = (y^2 - \mathcal E) \psi(y).
+\]
+
+Let's consider the asymptotic behavior where \(y \gg \mathcal E\) for motivation. We have \(\ddv{\psi}{y} = y^2 \psi\), which has general solution
+\[
+	\psi(y) = A e^{-y^2/2} + B e^{y^2/2} \implies \psi(y) = A e^{-y^2/2},
+\]
+where we let \(B = 0\) in order for the wavefunction to be normalizable. Now, let's suppose the solution is of the form \(\psi(y) = h(y) e^{-y^2/2}\). Substituting this into the Schr\"odinger equation, we have
+\[
+	\ddv{h}{y} - 2y \dv{h}{y} + (\mathcal E - 1) h = 0.
+\]
+We now assume \(h(y) = a_0 + a_1 y + a_2 y^2 + \cdots = \sum_{j = 0}^{\infty} a_j y^j\). We have
+\begin{align*}
+	\dv{h}{y}
+		&= \sum_{j = 1}^{\infty} j a_j y^{j - 1}
+		= \sum_{j = 0}^{\infty} j a_j y^{j - 1} \\
+	\ddv{h}{y}
+		&= \sum_{j = 2}^{\infty} j(j - 1) a_j y^{j - 2}
+		= \sum_{j = 0}^{\infty} (j + 2)(j + 1) a_{j + 2} y^j
+\end{align*}
+This gives
+\[
+	\sum_{j = 0}^{\infty} [(j + 2)(j + 1) a_{j + 2} y^j - 2j a_j y^j + (\mathcal E - 1) a_j y^j] = 0.
+\]
+Since \(y\) is arbitrary, we have that
+\[
+	(j + 2)(j + 1) a_{j + 2} - 2j a_j + (\mathcal E - 1) a_j = 0 \iff a_{j + 2} = \frac{2j + 1 - \mathcal E}{(j + 1)(j + 2)} a_j.
+\]
+for all \(j\). Therefore, we have that \(h\) is defined by \(a_0\) and \(a_1\). Moreover, since \(V\) is even, we have that \([\hat H, \hat \pi] = 0\) and the solutions are generated of even and odd solutions. However, we also know that the even and odd solutions are just the ones where \(a_1 = 0\) and \(a_0 = 0\) respectively. Therefore, it suffices to analyze the cases where \(a_1 = 0\) and \(a_0 = 0\).
+
+However, we have a problem. In particular, sometimes for large \(\abs y\), \(h(y)\) is unbounded. Note that for large \(\abs y\), the terms that dominate \(h(y)\) are the ones that have large \(j\). For large \(j\), we have
+\[
+	a_{j + 2} \approx \parens*{\frac{2}{j}} a_j \implies \frac{a_{j + 2}}{a_j} \approx \frac{2}{j}.
+\]
+Moreover, note that we can write
+\begin{align*}
+	\exp(y^2) = \sum_{j = 0}^{\infty} \frac{1}{j!} y^{2j} = \sum_{\mathclap{j = 0, 2, 4, \dots}} B_j x^j,
+\end{align*}
+where \(B_j = \frac{1}{(j/2)!}\). Then for large \(j\), we have \(B_{j + 2}/B_j \approx \frac{2}{j}\). Therefore, since the asymptotic behaviors are the same, we have \(h(y) \sim \exp(y^2)\). This further gives \(\psi(y) \sim \exp(y^2) \exp(-y^2/2) \sim \exp(y^2/2)\), which is bad.
+
+To fix this, we will require the series to terminate, i.e. \(a_{n + 2} = 0\) for some \(n\). Equivalently,
+\[
+	0 = a_{n + 2} = \frac{2n + 1 - \mathcal E}{(n + 1)(n + 2)} a_n \implies \mathcal E = 2n + 1.
+\]
+This gives the quantized energies \(E_n = \half (2n + 1) \hbar \omega\), where \(n \in \set{0, 2, 4, 6, \dots}\). In general, we have:
+\begin{proposition}[Harmonic Oscillator Wavefunctions]
+	If we have the potential \(V(x) = \half kx^2\), then we have the wavefunctions
+	\[
+		\psi_n(x) = \parens*{\frac{m\omega}{\hbar \pi}}^{1/4} \frac{1}{\sqrt{n! 2^n}} H_n\parens*{\sqrt{\frac{m\omega}{\hbar}} x} e^{-\frac{m\omega}{\hbar} x^2 /2},
+	\]
+	corresponding to the energies \(E_n = \half(2n + 1)\hbar \omega\), for \(n \in \set{0, 2, 4, 6, \dotsc}\). Here \(\omega = \sqrt{\frac{k}{m}}\) and \(H_n\) are the \vocab{Hermite polynomials}, defined by\footnote{\url{https://en.wikipedia.org/wiki/Hermite_polynomials}}
+	\[
+		H_n(x) = (-1)^n e^{x^2} \dnv{}{x}{n} e^{-x^2} = \parens*{2x - \dv{}{x}}^n \cdot 1.
+	\]
+\end{proposition}
+
+
+\end{document}
+

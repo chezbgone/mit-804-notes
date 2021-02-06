@@ -1,0 +1,123 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{February 27, 2019}
+\subsection{Measurement and Wavefunction Collapse}
+\begin{proposition}[Spectral Theorem]
+	Given a Hermitian operator \(\hat A\), we have the following:
+	\begin{itemize}
+		\item The eigenvalues are real.
+		\item The eigenfunctions are orthogonal, i.e.\ \(\angles{\psi_n, \psi_m} = \delta_{n, m}\) for eigenfunctions \(\psi_n, \psi_m\).
+		\item The eigenfunctions form a complete basis, i.e.\ for all \(f(x)\), there exists a function \(c(n)\) such that
+		\[
+			f(x) = \int c(n) \psi_{A, n}(x) \,dn.
+		\]
+	\end{itemize}
+\end{proposition}
+
+When we measure an observable, it causes the wavefunction to collapse to one of its eigenfunctions. The value of \(\abs{c(n)}^2\) gives the corresponding probability of which eigenvalue we will measure if we collapse the wavefunction.
+
+
+\begin{example}
+	Consider the momentum operator \(\hat p\). Recall that the eigenfunctions of \(\hat p\) are \(f\colon x \mapsto e^{ikx}\) for \(k \in \RR\). Then we have that these functions form a complete basis of the vector space of wavefunctions, i.e.\
+	\[
+		\psi(x) = \int c(k) e^{ikx} \,dk.
+	\]
+\end{example}
+
+To compute the \(c(n)\), note that we can take the inner product of the wavefunction with the corresponding eigenfunction. This works because of both orthogonality and the wavefunctions form a complete basis:
+\begin{align*}
+	\angles{\psi_{A, n}(x), \psi(x)}
+		&= \angles*{\psi_{A, n}(x), \int c(m) \psi_{A, m}(x) \, dm} \\
+\intertext{Since the inner product is linear,}
+		&= \int c(m) \angles*{\psi_{A, n}(x), \psi_{A, m}(x)} \,dm \\
+		&= \int c(m) \delta_{n, m} \,dm \\
+		&= c(n).
+\end{align*}
+
+\subsection{Dirac Notation}
+Note that \(\psi(x), \tilde\psi(k), \tilde\psi(p)\) are just different representations of the same wavefunction in different bases. We will consider the basis independent notation, where we write the wavefunction as \(\ket{\psi}\), called a \vocab{ket vector}. Similarly, for \(\psi^*\), we will represent this as \(\bra{\psi}\), called a \vocab{bra vector} in the dual space. If we put these two together, then we get the scalar product
+\[
+	\braket{\varphi}{\psi} = \angles{\varphi(x), \psi(x)}.
+\]
+Similarly, we can rewrite the relations
+\begin{itemize}
+	\item \(\angles A = \angles{\psi(x), \hat A \psi(x)} = \bra{\psi} \hat A \ket{\psi}\)
+	\item \(\hat A^\dagger = \hat A \implies \braket{\hat A \varphi}{\psi} = \bra{\varphi}\hat A\ket{\psi}\)
+	\item \(\braket{\varphi}{a\psi} = a \braket{\varphi}{\psi}\)
+	\item \(\braket{a\varphi}{\psi} = a^* \braket{\varphi}{\psi}\)
+\end{itemize}
+
+\subsection{Time Evolution and Schr\"odinger Equation}
+There is no rigorous derivation to get Schr\"odinger equation from classical mechanics, otherwise classical physics will already be a quantum theory. However, we can give motivation for it.
+
+\subsubsection{Motivation}
+Recall the plane wave
+\[
+	\psi_p(x, t) = e^{i(kx - \omega t)}.
+\]
+(We write \(\psi_p\) because it is an eigenfunction of \(\hat p\).) The photoelectric effect tells us that there is a relationship between the frequency and the energy. Therefore, we assume that \(E = h\nu = \frac{h}{2\pi} \omega = \hbar \omega\). We want to get this value with the momentum operator somehow. We get
+\[
+	i\hbar \dv{}{t} \psi_p(x, t) = \hbar \omega \psi_p(x, t) = E \psi_p(x, t).
+\]
+But from classical physics, we have \(E = \frac{p^2}{2m} + V\), where \(V\) is the potential energy. This is often called the Hamiltonian of the system. If we define the \vocab{Hamiltonian operator} to be
+\[
+	\hat H = \frac{\hat p^2}{2m} + \hat V = \frac{\hat p \hat p}{2m} + \hat V,
+\]
+we have \vocab{Schr\"odinger equation}
+\[
+	i \hbar \pdv{}{t} \psi(x, t) = \hat H \psi(x, t) = \parens*{\frac{\hat p^2}{2m} + \hat V} \psi(x, t).
+\]
+If we expand this out in position space, we get
+\[
+	i\hbar \pdv{}{t} \psi(x, t) = -\frac{\hbar^2}{2m} \pddv{}{x} \psi(x, t) + V(x, t) \psi(x, t).
+\]
+Here the \(\hat V\) in position space happens to be just multiplication by the potential \(V\).
+
+
+\subsection{Time-independent Schr\"odinger Equation}
+Schr\"odinger equation seems pretty hard to solve, so we will simplify it by assuming that \(V\) is time independent, i.e.\ \(V = V(x)\). Let's try to find a solution of the form
+\[
+	\Psi(x, t) = \psi(x) \cdot f(t).
+\]
+This seems like a significant restriction at first, but it turns out that we can construct the general solution with the subset of solutions that we get this way. We compute the derivatives as
+\[
+	\pddv{\Psi}{x} = \ddv{\psi}{x} f,
+		\qquad \pdv{\Psi}{t} = \psi \dv{f}{t}.
+\]
+Substituting this into Schr\"odinger Equation, we get
+\[
+	-\frac{\hbar^2}{2m} \ddv{\psi(x)}{x} f(t) + V \psi(x) f(t) = i\hbar \psi(x) \dv{f(t)}{t}.
+\]
+Dividing by \(\psi(x) f(t)\),
+\[
+	-\frac{\hbar^2}{2m} \frac{1}{\psi(x)} \ddv{\psi(x)}{x} + V(x) = i\hbar \frac{1}{f(t)} \dv{f(t)}{t}.
+\]
+Note that the left only depends on \(x\) and the right only depends on \(t\). Therefore, both sides are constant. Let this constant be \(E\).
+
+For the right side, we get
+\[
+	i\hbar \frac{1}{f(t)} \dv{f(t)}{t} = E \implies f(t) = c e^{-iEt/\hbar} = c e^{-i\omega t}
+\]
+for some constant \(c\) and where \(\omega = E/\hbar\).
+
+For the left side, we get
+\[
+	-\frac{\hbar^2}{2m} \frac{1}{\psi(x)} \ddv{\psi(x)}{x} + V(x) = E
+\]
+multiplying by \(\psi(x)\), we have
+\[
+	-\frac{\hbar^2}{2m} \ddv{\psi(x)}{x}  + V(x) \psi(x) = E \psi(x),
+\]
+which is just the equation \(\hat H \psi = E \psi\). Therefore, solving the time-independent Schr\"odinger equation is reduced to finding the eigenfunction of \(\hat H\).
+
+
+
+
+
+
+
+
+\end{document}
+

@@ -1,0 +1,89 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{April 29, 2019}
+From the Laplacian in polar coordinates, we get the time independent Schr\"odinger equation
+\[
+	-\frac{\hbar^2}{2m} \brackets*{\frac{1}{r^2} \pdv{}{r} \parens*{r^2 \pdv{\psi}{r}} + \frac{1}{r^2 \sin \theta} \pdv{}{\theta} \parens*{\sin \theta \pdv{\psi}{\theta}} + \frac{1}{r^2 \sin^2 \theta} \pddv{\psi}{\varphi}} + V \psi = E\psi.
+\]
+We assume that we have a solution of the form \(\psi(r, \theta, \varphi) = R(r) \cdot Y(\theta, \varphi)\), where \(R\) is called the radial part and \(Y\) is called the angular part. Substituting this in and simplifying, we get
+\begin{align*}
+	\frac{1}{R} \dv{}{r} \parens*{r^2 \dv{R}{r}} - \frac{2mr^2}{\hbar^2} [V(r) - E] &= \ell(\ell + 1) \\
+	\frac{1}{Y} \brackets*{\frac{1}{\sin \theta} \pdv{}{\theta} \parens*{\sin\theta \pdv{Y}{\theta}} + \frac{1}{\sin^2\theta} \pddv{Y}{\varphi}} &= -\ell(\ell + 1)
+\end{align*}
+for the radial and angular part of the wavefunction respectively, and where \(\ell(\ell + 1)\) is just some constant (motivation provided later). Note that the second equation has no dependence on \(V(r)\), so when we solve this, we can use the solutions for all \(V(r)\).
+
+For the radial equation, if we make the substitution \(u(r) = r R(r)\), then we get the equation
+\[
+	-\frac{\hbar^2}{2m} \ddv{u}{r} + \brackets*{V(r) + \frac{\hbar^2}{2m}\frac{\ell(\ell + 1)}{r^2}} u = Eu.
+\]
+If we are looking for spherically symmetric solutions, then the second equation gives us \(\ell = 0\). Simplifying this is nontrivial, so we will stop here.
+
+\begin{example}[Infinite spherical well]
+	Suppose we want the spherically symmetric solutions \(\psi(r)\) of the infinite spherical well
+	\[
+		V(r) = \begin{cases}
+			0      & r \leq a \\
+			\infty & r > a
+		\end{cases}.
+	\]
+	On the outside of the well, we have \(u(r) = 0\), and on the inside, we have
+	\[
+		-\frac{\hbar^2}{2m} \ddv{u}{r} = Eu.
+	\]
+	This has the general solution
+	\[
+		u(r) = A \sin kr + B \cos kr,
+	\]
+	where \(k = \frac{\sqrt{2mE}}{E}\). In order for \(\psi = u/r\) to be finite at \(r = 0\), we must have \(B = 0\). Therefore, we have
+	\[
+		u(r) = A \sin kr, \qquad \psi(r) = \frac{u(r)}{r}.
+	\]
+	Considering the boundary condition at \(r = a\), we have
+	\[
+		\sin ka = 0 \implies k_n a = n \pi \implies k_n = \frac{n\pi}{a},
+	\]
+	and we can compute the normalization constant \(A = \frac{1}{\sqrt{2\pi a}}\).
+\end{example}
+
+\begin{example}[Hydrogen Atom]
+	Let's find the spherically symmetric solutions to the hydrogen atom potential
+	\[
+		V(r) = -\frac{Z\mathrm e^2}{r},
+	\]
+	where \(Z\) is the atomic number and \(\mathrm e\) is the elementary charge. Here we use \vocab{Gaussian units}, i.e.\ \(4\pi \eps_0 = 1\). Let \(r = \sqrt{-\frac{\hbar^2}{8mE}} \rho\) and \(\lambda = \frac{Z\mathrm e^2}{\hbar} \sqrt{-\frac{m}{2E}}\). This gives the equation
+	\[
+		\ddv{u}{\rho} + \lambda \frac{u}{\rho} - \frac{u}{4} = 0.
+	\]
+	First, note that as \(\rho \to \infty\), we get \(u(\rho) \sim e^{-\rho/2}\). Assume that
+	\[
+		u(\rho) = h(\rho) e^{-\rho/2}.
+	\]
+	Substituting this into the ODE, we get
+	\[
+		\ddv{h}{\rho} - \dv{h}{\rho} + \frac{\lambda}{\rho} h = 0.
+	\]
+	Let \(h(\rho) = \sum_{j = 1}^{\infty} b_i \rho^j\), and then we get the recurrence relation
+	\[
+		b_{j + 1} = -\frac{\lambda - j}{j(j + 1)} b_j.
+	\]
+	This means that as \(\rho \to \infty\), we have \(b_{j + 1} \sim \frac{b_j}{j + 1}\), which implies that \(h(\rho)\) grows exponentially. However, there is a solution if \(\lambda - j = 0\) at some point, i.e.\ if \(\lambda \in \ZZ_+\).
+	
+	Let \(\lambda = n\) be an integer. This is called the \vocab{principal quantum number}. Then, we have that
+	\[
+		n = \lambda = \frac{Z\mathrm e^2}{\hbar} \sqrt{-\frac{m}{2E}} \implies E_n = -\frac{Z^2m\mathrm e^4}{2\hbar} \frac{1}{n^2} = -\frac{1}{2} \frac{Z^2\mathrm e^2}{a_0} \frac{1}{n^2} = \frac{E_1}{n^2},
+	\]
+	where \(a_0 = \frac{\hbar^2}{m\mathrm e^2}\).
+	
+	The eigenfunctions are hard to explicitly write, but the ground state is
+	\[
+		\psi_1(r) = \frac{1}{\sqrt \pi} \parens*{\frac{a_0}{Z}}^{-3/2} e^{-Zr/a_0}.
+	\]
+	This gives us all spherically symmetric solutions, which correspond to 1s, 2s, 3s, \ldots orbitals.
+\end{example}
+
+
+
+\end{document}
+

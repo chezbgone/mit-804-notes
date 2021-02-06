@@ -1,0 +1,133 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{April 24, 2019}
+\subsection{Three-dimensional Systems}
+We will first generalize the Schr\"odinger equation to three dimensions. To do this, we have
+\[
+	\hat H = \parens*{\frac{\hat p_x^2 + \hat p_y^2 + \hat p_z^2}{2m}} + V(x, y, z, t) = \frac{\hat p^2}{2m} + V(x, y, z, t),
+\]
+where \(\hat p_x = -i\hbar \pdv{}{x}\), \(\hat p_y = -i\hbar \pdv{}{y}\), \(\hat p_z = -i\hbar \pdv{}{z}\), and we define \(\hat p = \hat p_x^2 + \hat p_y^2 + \hat p_z^2\). Then, the Schr\"odinger equation is
+\[
+	\hat H \psi = i \hbar \pdv{}{t} \psi.
+\]
+Sometimes, we will write
+\[
+	-\frac{\hbar^2}{2m} \nabla^2 \psi(\vec r, t) + V(\vec r, t) \psi(\vec r, t) = i \hbar \pdv{}{t} \psi(\vec r, t).
+\]
+We will similarly assert that
+\begin{gather*}
+	P(x, y, z, t) = \abs{\psi(\vec r, t)}^2 \\
+	1 = \int \abs{\psi(x, t)}^2 \,d^3r.
+\end{gather*}
+
+As in the one-dimensional case, we have the time independent Schr\"odinger equation \(\hat H \psi(\vec r) = E \psi(\vec r)\), and the general solution
+\[
+	\psi_n(\vec r, t) = \psi_n(\vec r) e^{-i E_n t/\hbar},
+\]
+where \(\hat H \psi_n = E_n \psi_n\) describes the eigenvectors.
+
+\subsubsection{Free Particle}
+Let \(V(\vec r) = 0\). Then we have
+\[
+	\hat H = \frac{\hat p^2}{2m} = -\frac{\hbar^2}{2m} \nabla^2 = -\frac{\hbar^2}{2m} \parens*{\pddv{}{x} + \pddv{}{y} + \pddv{}{z}},
+\]
+and we wish to solve
+\[
+	-\frac{\hbar^2}{2m} \parens*{\pddv{}{x} + \pddv{}{y} + \pddv{}{z}} \psi(\vec r) = E \psi(\vec r).
+\]
+Let's guess a solution of the form \(\psi(x, y, z) = \psi_x(x) \psi_y(y) \psi_z(z)\). Then we wish to solve
+\[
+	E \psi_x \psi_y \psi_z = -\frac{\hbar^2}{2m} (
+		\psi_y \psi_z \partial_x^2 \psi_x +
+		\psi_z \psi_x \partial_y^2 \psi_y +
+		\psi_x \psi_y \partial_z^2 \psi_z
+	).
+\]
+Dividing by \(\psi_x \psi_y \psi_z\), we have
+\[
+	E = -\frac{\hbar^2}{2m} \parens*{
+		\frac{\partial_x^2 \psi_x}{\psi_x} +
+		\frac{\partial_y^2 \psi_y}{\psi_y} +
+		\frac{\partial_z^2 \psi_z}{\psi_z}
+	}.
+\]
+Reducing, we get
+\begin{align*}
+	-\frac{\hbar^2}{2m}\pddv{}{x} \psi_x = E_x \psi_x &&
+	-\frac{\hbar^2}{2m}\pddv{}{y} \psi_y = E_y \psi_y &&
+	-\frac{\hbar^2}{2m}\pddv{}{z} \psi_z = E_z \psi_z.
+\end{align*}
+This is just the equation that describes a one-dimensional free particle! This means that we have
+\begin{align*}
+	\psi_x(x) = e^{i k_x x} &&
+	\psi_y(y) = e^{i k_y y} &&
+	\psi_z(z) = e^{i k_z z},
+\end{align*}
+where
+\begin{align*}
+	k_x^2 = \frac{2m}{\hbar^2} E_x &&
+	k_y^2 = \frac{2m}{\hbar^2} E_y &&
+	k_z^2 = \frac{2m}{\hbar^2} E_z.
+\end{align*}
+Combining, we get
+\[
+	E = E_x + E_y + E_z = \frac{\hbar^2}{2m} (k_x^2 + k_y^2 + k_z^2) = \frac{\hbar^2}{2m} \vec k^2,
+\]
+where \(\vec k = (k_x, k_y, k_z)\). Then, we have the full solution
+\[
+	\psi(\vec r) = e^{i(\vec k \cdot\vec r)} \implies \psi(\vec r, t) = e^{i \vec k \cdot \vec r - \omega t},
+\]
+where \(\omega = E/\hbar\).
+
+\subsubsection{Infinite Cube Well}
+Let \(V(\vec r) = \begin{cases}
+	0 & 0 < x, y, z < a \\ \infty & \text{else}
+\end{cases}\). We will again use separation of variables. Recall that in one dimension, we have the eigenstates
+\[
+	\phi_n(x) = \sqrt{\frac{2}{a}} \sin(k_n x), \qquad E_n = \frac{\hbar^2}{2m} k_n^2, \qquad k_n = \frac{(n + 1)\pi}{a},
+\]
+where \(n = 0, 1, 2, \dots\). Then, in three-dimensions, we have the eigenstates
+\[
+	\phi_n(\vec r) = \brackets*{\sqrt{\frac{2}{a}}}^3 \sin(k_{n_x} x) \sin(k_{n_y} y) \sin(k_{n_z} z),
+\]
+where
+\[
+	k_{n_x} = \frac{(n_x + 1) \pi}{a}, \qquad
+	k_{n_y} = \frac{(n_y + 1) \pi}{a}, \qquad
+	k_{n_z} = \frac{(n_z + 1) \pi}{a},
+\]
+and \(n_x, n_y, x_z = 0, 1, 2, \dots\). Then we have
+\[
+	E_n = \frac{\hbar^2}{2m} \vec k^2 = \frac{\hbar^2 \pi}{2m} [
+		(n_x + 1)^2 +
+		(n_y + 1)^2 +
+		(n_z + 1)^2
+	].
+\]
+However, note that this system is degenerate (in the sense that a particular energy does not correspond to a unique wavefunction). This can be seen easily by rearranging the dimensions.
+
+\subsubsection{Harmonic Oscillator}
+Let \(V(\vec r) = \half m\omega^2 (x^2 + y^2 + z^2) = \half m \omega^2 \vec r^2\). Let's again guess the solution \(\phi(x, y, z) = \phi_x(x) \phi_y(y) \phi_z(z)\). Recalling that in one dimension we have
+\[
+	E_n = \hbar \omega \parens*{n + \half},
+\]
+we have the solution in three-dimensions
+\[
+	E_{n_x, n_y, n_z} = \hbar\omega \parens*{n_x + n_y + n_z + \frac{3}{2}}.
+\]
+This again yields degeneracies. This is called the \vocab{isotropic harmonic oscillator}. To remedy some of this, we will modify the potential to be
+\[
+	V(\vec r) = \half m (\omega_x^2 x^2 + \omega_y^2 y^2 + \omega_z^2 z^2).
+\]
+
+\subsubsection{Radial Potentials}
+Sometimes our potential will be a function of the distance from the origin, i.e.\ we can write \(V(\vec r) = V(\abs{\vec r}) = V(r)\). In this case it makes sense to use spherical coordinates. (Recall that we use \((r, \varphi)\) for the \(xy\)-plane and \(\theta\) for angle between \(\vec r\) and the \(z\)-axis). We have the Laplacian
+\[
+	\nabla^2 = \frac{1}{r^2} \pdv{}{r} \parens*{r^2 \pdv{}{r}} + \frac{1}{r^2 \sin \theta} \pdv{}{\theta} \parens*{\sin \theta \pdv{}{\theta}} + \frac{1}{r^2 \sin^2 \theta} \pddv{}{\varphi},
+\]
+which we will use in the Schr\"odinger equation.
+
+
+\end{document}

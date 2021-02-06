@@ -1,0 +1,144 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{May 06, 2019}
+\subsection{Angular Momentum}
+Recall that in classical mechanics, we have
+\[
+	\vec L = \vec r \times \vec p,
+\]
+i.e.
+\[
+	L_x = y p_z - z p_y, \qquad
+	L_y = z p_x - x p_z, \qquad
+	L_z = x p_y - y p_x.
+\]
+
+We will define the corresponding quantum operators by letting
+\begin{align*}
+	\hat L_x &= y \hat p_z - z \hat p_y = -i\hbar \parens*{y \pdv{}{z} - z \pdv{}{y}}, \\
+	\hat L_y &= z \hat p_x - x \hat p_z = -i\hbar \parens*{z \pdv{}{x} - x \pdv{}{z}}, \\
+	\hat L_z &= x \hat p_y - y \hat p_x = -i\hbar \parens*{x \pdv{}{y} - y \pdv{}{x}}.
+\end{align*}
+
+Note that by symmetry, \(\hat L_x\), \(\hat L_y\), and \(\hat L_z\) have the same eigenvalues. We consider \(\hat L_z\) in spherical coordinates:
+\[
+	\hat L_z = -i\hbar \pdv{}{\varphi}.
+\]
+Then we wish to solve
+\[
+	\hat L_z \psi(r, \theta, \varphi) = L_z \phi(r, \theta, \varphi)
+		\implies -i\hbar \pdv{\psi}{\varphi} = L_z \phi,
+\]
+which has the solution
+\[
+	\psi(r, \theta, \varphi) = f(r, \theta) \exp(i L_z \varphi/\hbar).
+\]
+Moreover, note that we must have \(\psi(r, \theta, \varphi) = \psi(r, \theta, \varphi + 2\pi)\). This implies \( \exp(2\pi iL_z/\hbar) = 1 \implies L_z = m\hbar \) for some \(m \in \ZZ\). This gives the eigenvalues for \(\hat L_x\), \(\hat L_y\), and \(\hat L_z\).
+
+Recall that
+\begin{align*}
+	[\hat L_x, \hat L_y] &= i \hbar L_z, \\
+	[\hat L_y, \hat L_z] &= i \hbar L_x, \\
+	[\hat L_z, \hat L_x] &= i \hbar L_y,
+\end{align*}
+are nonzero, so there are no simultaneous eigenfunctions for these operators. However, if we consider
+\[
+	\hat L^2 = \hat L_x^2 + \hat L_y^2 + \hat L_z^2,
+\]
+then we have
+\[
+	[\hat L^2, \hat L_x] = [\hat L^2, \hat L_x] = [\hat L^2, \hat L_x] = 0.
+\]
+
+Therefore, there might be a simultaneous eigenfunction \(\psi\) with
+\[
+	\hat L^2 \psi = a \psi, \qquad \hat L_z \psi = b\psi.
+\]
+
+Let us define \(\hat L_+ = \hat L_x + i \hat L_y\) and \(\hat L_- = \hat L_x - i \hat L_y\). Then we get
+\[
+	[\hat L_z, \hat L_\pm] = \pm \hbar \hat L_\pm, \qquad [\hat L^2, \hat L_\pm] = 0.
+\]
+
+\begin{proposition}
+	If \(\psi\) is an eigenfunction of \(\hat L^2\) and \(\hat L_z\), then \(\hat L_\pm \psi\) is also an eigenfunction of \(\hat L^2\) and \(\hat L_z\).
+\end{proposition}
+\begin{proof}
+	Let \(\hat L^2\psi = a \psi\) and \(\hat L_z \psi = b \psi\). Then
+	\[
+		\hat L^2(\hat L_\pm \psi) = \hat L_\pm (\hat L^2 \psi) = \hat a L_\pm \psi,
+	\]
+	where we used the commutativity in the first step and the fact that \(\psi\) is an eigenfunction in the second step.
+
+	Similarly, we have
+	\[
+		\hat L_z(\hat L_\pm \psi)
+			= ([\hat L_z, \hat L_\pm] + \hat L_\pm \hat L_z) \psi
+			= (\pm \hbar \hat L_\pm + b\hat L_\pm) \psi
+			= (b \pm \hbar) \hat L_\pm \psi. \qedhere
+	\]
+\end{proof}
+
+Note that in the first case, we get the same eigenvalue, but in the second case, we get a different eigenvalue. We call \(\hat L_+\) and \(\hat L_-\) raising and lowering operators, because they increase and decrease the eigenvalues for \(\hat L_z\).
+
+We can think of \(L_z\) as an \(L\) vector that is projected onto the \(L_z\) axis.
+\begin{center}
+	\begin{asy}
+		import cse5;
+		size(4cm);
+
+		D((0, 0.8)--(0, -0.8), Arrows(TeXHead));
+		D((0, 0)--dir(40), Arrow(TeXHead));
+
+		D(dir(40)--(0, dir(40).y), dashed);
+		D((0, 0));
+
+		D(brace((0, 0), (0, dir(40).y)));
+
+		MP("L", dir(40), dir(-70));
+		MP("z", (0, 0.8), dir(180));
+		MP("L_z", (-0.1, dir(40).y/2), dir(180));
+	\end{asy}
+\end{center}
+We have that \(\hat L_+\) increases the value of \(L_z\), but does not change the length of \(L\). Therefore, there will be some point in which when we apply \(\hat L_+\), we will get \(0\).
+
+We can use this to help us find the value of \(a\) where \(\hat L^2 \psi_{\text{top}} = a \psi_{\text{top}}\). Suppose that \(\hat L_+ \psi_{\text{top}} = 1\). Then let \(\hat L^2 \psi_{\text{top}} = \hbar \ell \psi_{\text{top}}\). We also have
+\[
+	\hat L^2 = \hat L_\pm \hat L_\mp + \hat L_z^2 \pm \hbar \hat L_z.
+\]
+Hence,
+\begin{align*}
+	\hat L^2 \psi_{\text{top}}
+		&= (\hat L_- \hat L_+ + \hat L_z^2 + \hbar \hat L_z) \psi_{\text{top}} \\
+		&= (0 + \hbar^2 \ell^2 + \hbar^2 \ell) \psi_{\text{top}} \\
+		&= \hbar^2 \ell(\ell + 1) \psi_{\text{top}},
+\end{align*}
+and \(a = \hbar^2 \ell(\ell + 1)\).
+
+Similarly, we can say that there exists a state \(\psi_{\text{bot}}\) such that \(\hat L_- \psi_{\text{bot}}\) = 0. Let \(\hat L_z \psi_{\text{bot}} = \hbar \ol\ell \psi_{\text{bot}}\). Then by a similar process as above, we get
+\[
+	\hat L^2 \psi_{\text{bot}} = \hbar^2 \ol\ell (\ol\ell - 1) \psi_{\text{bot}}.
+\]
+Therefore, we have the equation
+\[
+	\ell(\ell + 1) = \ol\ell (\ol\ell - 1),
+\]
+which has the solutions \(\ol\ell = \ell + 1\) or \(\ol\ell = -\ell\). The first one is not possible because \(\ol\ell\) must be less than \(\ell\), so we have \(\ol\ell = -\ell\).
+
+Therefore, the eigenvalues of \(\hat L_z\) are \(m\hbar\), where \(m\) foes from \(-\ell\) to \(\ell\) in \(N\) steps. Therefore \(\ell = N/2\), and we have the general solution:
+\begin{gather*}
+	\ell = 0, \half, 1, \frac{3}{2}, 2, \dots \\
+	m = -\ell, -\ell + 1, \dots, \ell - 1, \ell
+\end{gather*}
+
+
+
+
+
+
+
+
+
+\end{document}

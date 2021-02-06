@@ -1,0 +1,46 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{May 15, 2019}
+\subsection{Final Exam Review}
+There will be seven problems; two multiple choice problems (total 31 points), and five longer ones. The exam will be 180 minutes long.
+
+For the multiple choice, some keywords are:
+\begin{itemize}
+	\item Hermitian operator
+	\item Time evolution of wavefunctions
+	\item Uncertainty in \(\hat L_x, \hat L_y, \hat L_z\)
+	\item General wavefunction properties with respect to the potential
+\end{itemize}
+
+Some details about the five longer problems:
+\subsubsection{Infinite Square Well (17 pts)}
+We know that the eigenfunctions of the infinite square well are
+\begin{align*}
+	\phi_n(x) &= \begin{cases}
+		\sqrt{2/L} \sin(k_n x) & 0 \leq x \leq L \\
+		0 & \text{otherwise}.
+	\end{cases} \\
+	k_n &= \frac{(n + 1)\pi}{L}.
+\end{align*}
+
+Consider what happens if we change the value of \(L\) at some time \(t\). In particular, suppose that we are in the ground state of the initial system. At some point \(t\), we double \(L\). What's the probability that we will be in the ground state of the new system?
+
+\subsubsection{One-dimensional harmonic Oscillator}
+Given some wavefunction that is the sum of the eigenstates, how do we find \(\angles p\)? One way is to take the integral, but another way is to write \(\hat p\) in terms of \(\hat a\) and \(\hat a^\dagger\). We will also look at the time evolution of states.
+
+\subsubsection{Isotropic Harmonic Oscillator}
+Look over how we derive the energy \(E_{n_x n_y n_z} = \hbar \omega(n_x + n_y + n_z + 3/2)\) from the potential function. Also think about how to count the number of degeneracies.
+
+\subsubsection{Angular Momentum}
+Know about the eigenfunctions and eigenvalues of \(\hat L^2\) and \(\hat L_z\), as well as relations like \(\braket{Y_{\ell m}}{Y_{\ell' m}} = \delta_{\ell \ell'} \delta_{m m'}\). Also, look at problems where we use \(\hat L_+\) and \(\hat L_-\). In particular, think about how to calculate \(\angles{L_x}\). A good way to do this is to write \(\hat L_x\) as the linear combination of \(\hat L_+\) and \(\hat L_-\).
+
+
+\subsubsection{Hydrogen Atom}
+Look at PSet10 problem 5. In particular, the eigenstates \(\phi_{n \ell m}\) are eigenstates of \(\hat H\), \(\hat L^2\), and \(\hat L_z\). This is apparently the easiest problem.
+
+
+
+\end{document}
+

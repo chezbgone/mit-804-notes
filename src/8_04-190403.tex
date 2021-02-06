@@ -1,0 +1,107 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{April 03, 2019}
+\subsection{More on the Harmonic Oscillator}
+\subsubsection{Ladder Operators}
+Recall that we have the Schr\"odinger Equation
+\[
+	-\frac{\hbar^2}{2m} \ddv{\psi}{x} + \half m \omega^2 x^2 \psi = E \psi.
+\]
+Rewriting,
+\[
+	\frac{1}{2m} \brackets*{\hat p^2 + (m \omega \hat x)^2} \psi = E \psi.
+\]
+Let's try to use difference of squares to rewrite the left side. We guess that
+\[
+	\frac{1}{2m} \brackets*{\hat p^2 + (m \omega \hat x)^2} \psi = \frac{1}{2m} (\hat p + im\omega \hat x) (\hat p - im\omega \hat x).
+\]
+However, note that operators do not always commute! Let's see what happens when we try to apply this to \(\psi\) and expand it.
+\begin{align*}
+	\frac{1}{2m} (\hat p + im\omega \hat x) (\hat p - im\omega \hat x) \psi
+		&= \frac{1}{2m}\parens*{\frac{\hbar}{i} \dv{}{x} - im\omega x}\parens*{\frac{\hbar}{i}\dv{}{x} + im\omega x} \psi \\
+		&= \frac{1}{2m}\parens*{-\hbar^2 \ddv{\psi}{x} + \hbar m \omega \dv{}{x} (x \psi) - \hbar m \omega x \dv{\psi}{x} + (m\omega x)^2 \psi} \\
+\intertext{By the product rule,}
+		&= \frac{1}{2m}\parens*{-\hbar^2 \ddv{\psi}{x} + \hbar m \omega \psi + \hbar m \omega x \dv{\psi}{x} - \hbar m \omega x \dv{\psi}{x} + (m\omega x)^2 \psi} \\
+		&= \frac{1}{2m}\parens*{-\hbar^2 \ddv{\psi}{x} + \hbar m \omega \psi + (m\omega x)^2 \psi} \\
+\intertext{Rearranging more,}
+		&= \frac{1}{2m}\parens*{\hat p^2 + (m\omega x)^2}\psi + \half \hbar \omega\psi \\
+		&= \parens*{\hat H + \half \hbar \omega} \psi.
+\end{align*}
+\begin{definition}
+	We will call these operators \vocab{ladder operators}, defined by
+	\begin{align*}
+		\hat a_+ &= \frac{1}{\sqrt{2m}} \parens*{\frac{\hbar}{i} \dv{}{x} + im\omega x} = \frac{1}{\sqrt{2m}} (\hat p + im\omega \hat x) \\
+		\hat a_- &= \frac{1}{\sqrt{2m}} \parens*{\frac{\hbar}{i} \dv{}{x} - im\omega x} = \frac{1}{\sqrt{2m}} (\hat p - im\omega \hat x).
+	\end{align*}
+	Sometimes, we call these the \vocab{creation} and \vocab{annihilation} operators, or the \vocab{raising} and \vocab{lowering} operators.
+\end{definition}
+Then, we have the relations
+\[
+	\hat a_-^\dagger = \hat a_+, \qquad
+	\hat H = \hat a_- \hat a_+ - \half \hbar \omega, \qquad
+	\hat H = \hat a_+ \hat a_- + \half \hbar \omega, \qquad
+	[\hat a_-, \hat a_+] = \hbar\omega.
+\]
+
+\begin{proposition}
+	If \(\psi\) is an eigenfunction of \(\hat H\) with eigenvalue \(E\), then
+	\begin{itemize}
+		\item \(\hat a_+ \psi\) is also an eigenfunction of \(\hat H\) with energy \(E + \hbar \omega\), and
+		\item \(\hat a_- \psi\) is also an eigenfunction of \(\hat H\) with energy \(E - \hbar \omega\).
+	\end{itemize}
+\end{proposition}
+\begin{proof}
+	Let \(\psi\) be an eigenfunction of \(\hat H\) with eigenvalue \(E\). Then \\
+
+	\begin{minipage}{0.54\textwidth}
+		\begin{align*}
+			\hat H (\hat a_+ \psi)
+				&= \parens*{\hat a_+ \hat a_- + \half \hbar \omega}(\hat a_+ \psi) \\
+				&= \parens*{\hat a_+ \hat a_- \hat a_+ + \half \hbar \omega \hat a_+} \psi \\
+				&= \hat a_+ \parens*{\hat a_- \hat a_+ + \half \hbar \omega} \psi \\
+				&= \hat a_+ \parens*{\hat a_- \hat a_+ - \half \hbar \omega + \hbar \omega} \psi \\
+				&= \hat a_+ \parens*{\hat H + \hbar \omega} \psi \\
+				&= \hat a_+ \parens*{E + \hbar \omega} \psi \\
+				&= \parens*{E + \hbar \omega}(\hat a_+ \psi).
+		\end{align*}
+	\end{minipage}
+	\begin{minipage}{0.54\textwidth}
+		\begin{align*}
+			\hat H (\hat a_- \psi)
+				&= \parens*{\hat a_- \hat a_+ - \half \hbar \omega}(\hat a_- \psi) \\
+				&= \parens*{\hat a_- \hat a_+ \hat a_- - \half \hbar \omega \hat a_-} \psi \\
+				&= \hat a_- \parens*{\hat a_+ \hat a_- - \half \hbar \omega} \psi \\
+				&= \hat a_- \parens*{\hat a_+ \hat a_- + \half \hbar \omega - \hbar \omega} \psi \\
+				&= \hat a_- \parens*{\hat H - \hbar \omega} \psi \\
+				&= \hat a_- \parens*{E - \hbar \omega} \psi \\
+				&= \parens*{E - \hbar \omega}(\hat a_- \psi). \qedhere
+		\end{align*}
+	\end{minipage}
+\end{proof}
+
+Now, we know that if we have one solution then we can get all the solutions, but we need to find a solution first. We will find the ground state \(\psi_0\). Since this is the lowest state, it turns out that we have \(a_- \psi_0 = 0\). In particular, we get
+\[
+	a_- \psi_0 = \frac{1}{\sqrt{2m}} \parens*{\frac{\hbar}{i} \dv{}{x} - im\omega x} \psi_0 = 0 \implies \dv{\psi_0}{x} = -\frac{m\omega}{\hbar} x \psi_0.
+\]
+Solving this differential equation gives us \(\psi_0 = A_0 e^{-(m\omega/2\hbar)x^2}\). We also have that
+\[
+	\hat H \psi_0 = \parens*{\hat a_+ \hat a_- + \half \hbar \omega} \psi_0 = \half \hbar \omega \psi_0 \implies E_0 = \half\hbar \omega.
+\]
+Then, we get the general solution as follows.
+
+\begin{proposition}[Harmonic Oscillator Wavefunctions]
+	If we have the potential \(V(x) = \half kx^2\), then we have the general wavefunction
+	\[
+		\psi_n(x) = A_0 (\hat a_+)^n e^{-(m\omega/2\hbar) x^2},
+	\]
+	with the corresponding energy \(E_n = (n + 1/2) \hbar \omega\).
+\end{proposition}
+
+
+
+
+
+\end{document}
+

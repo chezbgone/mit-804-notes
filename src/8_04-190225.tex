@@ -1,0 +1,186 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{February 25, 2019}
+\subsection{Summary}
+Here's what we have so far:
+
+Given a wavefunction \(\psi(x)\) of position, we can determine the probability density \(P(x) = \abs{\psi(x)}^2\) of the position. Then, we have the expected position
+\[
+	\angles{x} = \infint x P(x) \,dx.
+\]
+We also have two spaces that are related through a Fourier transform. In position space, we have the wavefunction \(\psi(x)\), and the operators
+\[
+	\hat x = x,
+		\qquad \hat p = -i \hbar \,\partial_x.
+\]
+In momentum space, we have the wavefunction \(\tilde \psi(p)\) and the operators
+\[
+	\hat x = i\hbar \,\partial_p,
+		\qquad \hat p = p.
+\]
+
+\subsection{Gaussian Wavepackets}
+Consider the wavefunction
+\[
+	\psi(x) = N \exp\brackets*{i \frac{p_0}{\hbar} - \frac{x^2}{2\sigma_0^2}},
+\]
+where \(N\) is a normalization constant and \(p_0 \in \RR\). To find the normalization constant, we take the integral and get
+\[
+	1 = \infint \abs{\psi(x)}^2 \,dx = \abs{N}^2 \infint \exp\brackets*{-\frac{x^2}{\sigma_0^2}} \,dx
+		\implies \abs N = \parens{\pi \sigma_0^2}^{-1/4}.
+\]
+Assuming \(N \in \RR\) gives us \(N = \parens{\pi \sigma_0^2}^{-1/4}\).
+
+Now let's find the corresponding wavefunction in momentum space. Taking the Fourier transform of \(\psi\), we have
+\begin{align*}
+	\tilde \psi(p) &= \frac{1}{\sqrt{2\pi \hbar}} \infint \psi(x) e^{-ipx/\hbar} \,dx \\
+		&= (\pi \sigma_0^2)^{-1/4} \cdot \frac{1}{\sqrt{2\pi \hbar}} \infint \exp\brackets*{-\frac{x^2}{2\sigma_0^2} - \frac{i(p - p_0)}{\hbar} x} \,dx \\
+		&= \parens*{\frac{\sigma_0}{\hbar\sqrt{\pi}}}^{1/2} \exp\brackets*{-\sigma_0^2 \frac{(p - p_0)^2}{2\hbar^2}}.
+\end{align*}
+Finding the normalization constant, we have
+\[
+	\infint \abs{\tilde\psi(p)}^2 \,dp
+		= \frac{\sigma_0}{\hbar\sqrt{\pi}} \infint \exp\brackets*{-\frac{\sigma_0^2 (p - p_0)^2}{\hbar^2}} \,dp
+		= \frac{\sigma_0}{\hbar\sqrt{\pi}} \sqrt{\frac{\pi}{\sigma_0^2/\hbar^2}} = 1.
+\]
+so it is already normalized.
+
+\begin{note}
+	It turns out that by Parseval's Theorem, the Fourier transform of a normalized wavefunction is already normalized.
+\end{note}
+
+Now we can try to find the uncertainties of position and momentum. We have
+\[
+	\Delta x = \sqrt{\angles{x^2} - \angles{x}^2}.
+\]
+Computing each component,
+\begin{align*}
+	\angles x &= \infint x \abs{\psi(x)}^2 \,dx \\
+		&= N^2 \infint x \exp\brackets*{-\frac{x^2}{\sigma_0^2}} \,dx \\
+		&= 0
+\end{align*}
+\begin{align*}
+	\angles{x^2} &= N^2 \infint x^2 \exp\brackets*{-\frac{x^2}{\sigma_0^2}} \,dx \\
+		&= \frac{\sigma_0^2}{2}.
+\end{align*}
+Therefore,
+\[
+	\Delta x = \frac{\sigma_0}{\sqrt{2}}.
+\]
+
+Similarly, we can calculate that \(\angles p = p_0\) and
+\[
+	\angles{p^2}
+		= N^2 \infint p^2 \exp\brackets*{\frac{\sigma_0^2 (p - p_0)^2}{\hbar ^2}} \,dp
+		= p_0^2 + \frac{\hbar^2}{2\sigma_0^2}.
+\]
+Therefore, \(\Delta p = \frac{\hbar}{\sigma_0\sqrt{2}}\). Note that this satisfies Heisenberg's Uncertainty principle, because
+\[
+	\Delta x \cdot \Delta p = \frac{\sigma_0}{\sqrt 2} \cdot \frac{\hbar}{\sigma_0\sqrt 2} = \frac{\hbar}{2} \geq \frac{\hbar}{2}.
+\]
+Note that since the product of the uncertainties is equal to exactly \(\frac{\hbar}{2}\), we say that this wavefunction has minimum uncertainty.
+
+\subsection{Operators}\label{subsec:operators}
+For a given system, things which can be measured (position, momentum, angular momentum, energy) are called \vocab{observables}. These are represented by linear Hermitian operators. Then, the values that can be measured for an observable are the eigenvalues of the corresponding operator. We will define everything more formally:
+
+We will work over the complex vector space of square-integrable function, i.e.\ functions \(f\) that satisfy
+\[
+	\infint \abs{f(x)}^2 \,dx < \infty.
+\]
+We call this our \vocab{state space}.
+
+We define the inner product of two functions \(\phi\) and \(\psi\) in our vector space to be
+\[
+	\angles{\varphi, \psi} = \int \varphi(x)^* \psi(x) \,dx.
+\]
+This inner product gives us a Hilbert space.
+
+\begin{definition}
+	An \vocab{operator} is a map from the state space to itself. We say that an operator \(\hat O\) is \vocab{linear} if
+	\[
+		\hat O(\alpha f + \beta g) = \alpha \hat O f + \beta \hat O g,
+	\]
+	for all \(\alpha, \beta \in \CC\) and \(f, g\) in the function space.
+\end{definition}
+
+\begin{example}
+	All of the following are operators:
+	\begin{align*}
+		\hat\varnothing &\colon f \mapsto 0  & \hat 1 &\colon f \mapsto f  & \hat x &\colon f \mapsto x \cdot f \\
+		\hat S &\colon f \mapsto f^2  & \hat A_3 &\colon f \mapsto f + 3  & \hat D_x &\colon f \mapsto \pdv{}{x} \cdot f,
+	\end{align*}
+	and the ones that are linear are \(\hat\varnothing\), \(\hat 1\), \(\hat x\), and \(\hat D_x\).
+\end{example}
+
+\begin{definition}
+	For an operator \(\hat A\), an \vocab{eigenfunction} is a function \(f_a\) such that
+	\[
+		\hat A f_a = a \cdot f_a
+	\]
+	for some \(a \in \CC\). We call \(a\) the \vocab{eigenvalue} corresponding to \(f_a\).
+\end{definition}
+
+\begin{example}
+	For the operator \(\hat D_x\), we have the eigenfunction \(e^{\alpha x}\) and the corresponding eigenvalue \(\alpha\), because
+	\[
+		\hat D_x e^{\alpha x} = \alpha e^{\alpha x}.
+	\]
+\end{example}
+
+It's important to note that operators do not commute! For example,
+\begin{align*}
+	\hat D_x \hat x e^{\alpha x} &= \hat D_x (x e^{\alpha x}) = (1 + \alpha x) e^{\alpha x} \\
+	\hat x \hat D_x e^{\alpha x} &= \hat x (\hat D_x e^{\alpha x}) = ax e^{ax},
+\end{align*}
+which are not equal. Therefore, \(\hat D_x \hat x \neq \hat x \hat D_x\). Since they do not commute, we have the following definition:
+\begin{definition}
+	Given operators \(\hat A\) and \(\hat B\), the \vocab{commutator} of \(\hat A\) and \(\hat B\) is the operator
+	\[
+		[\hat A, \hat B] = \hat A \hat B - \hat B \hat A.
+	\]
+\end{definition}
+
+Note that if two operators \(\hat A\) and \(\hat B\) commute, then we have \([\hat A, \hat B] = \hat 0\).
+
+\begin{example}
+	\begin{gather*}
+		[\hat x, \hat D_x] = -1 \\
+		[\hat x, \hat p] = i\hbar
+	\end{gather*}
+\end{example}
+
+\subsection{Observables}
+If an operator \(\hat A\) corresponds to an observable, then \(\angles A\) is real. Then we can write the expected value of \(A\) as
+\[
+	\angles A = \int \psi(x)^* \hat A \psi(x) = \angles{\psi, \hat A \psi}.
+\]
+
+\begin{definition}
+	Let the \vocab{adjoint} of \(\hat A\) be the operator \(\hat A^\dagger\) that satisfies
+	\[
+		\angles{\hat A^\dagger \varphi, \psi} = \angles{\varphi, \hat A \psi}.
+	\]
+	We say that an operator \(\hat A\) is \vocab{Hermitian} (in physics, math has a stricter definition) if \(\hat A^\dagger = \hat A\), i.e.\ it is self-adjoint.
+\end{definition}
+
+If we have a Hermitian operator \(\hat A\), then
+\[
+	\angles A
+		= \angles{\psi, \hat A \psi}
+		=\angles{\hat A \psi, \psi}
+		= \int \psi (\hat A \psi)^*
+		= \brackets*{\int \psi^* (\hat A \psi)}^* = \angles{A}^*.
+\]
+Therefore, \(\angles A\) is real, which is what we expect for observables.
+
+
+
+
+
+
+
+
+\end{document}
+

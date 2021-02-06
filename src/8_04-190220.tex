@@ -1,0 +1,90 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{February 20, 2019}
+The set of wavefunctions form a Hilbert space, i.e.\ a vector space that can be viewed as a complete metric space with respect to the inner product, which we will define in \cref{subsec:operators}.
+
+\subsection{Interference and Fourier Transforms}
+Suppose that we have a wavefunction that is the linear combination of two other wavefunctions:
+\[
+	\psi(x) = \alpha \psi_1(x) + \beta \psi_2(x).
+\]
+Then consider the probability distribution of \(\psi\). We get
+\begin{align*}
+	P(x) &= \abs{\psi(x)}^2 = \psi(x) \cdot \psi(x)^* \\
+		&= \abs{\alpha}^2 P_1(x) + \abs{\beta}^2 P_2(x) + \alpha^*\beta \psi_1(x)^* \psi_2(x) + \alpha\beta^* \psi_1(x) \psi_2(x)^*.
+\end{align*}
+We often call the last two terms the \vocab{interference terms}.
+
+\begin{example}
+	Let's consider the linear combination of the wavefunctions \(\psi_1(x) = e^{i k_1 x}\) and \(\psi_2(x) = e^{i k_2 x}\). For \(\psi = \alpha \psi_1(x) + \beta \psi_2(x)\), we have
+	\[
+		P(x) = \abs{\alpha}^2 + \abs{\beta}^2 = 2\abs{\alpha\beta} \cos((k_1 - k_2) x + \varphi).
+	\]
+	Note that there is positive information about \(P(x)\) with respect to \(x\), so \(\Delta x\) is finite, and therefore \(\Delta p > 0\).
+\end{example}
+
+To generalize, let's consider all possible linear combinations of plane waves \(e^{ikx}\). Since \(k\) is a continuous variable, we can do this with an integral. Let
+\[
+	\psi(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} \tilde\psi(k) e^{ikx} \,dk.
+\]
+This is just the Fourier transform! Note that we also have
+\[
+	\tilde\psi(k) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} \psi(k) e^{-ikx} \,dx.
+\]
+
+The interpretation of \(\abs{\tilde\psi(k)}^2\) is then the momentum probability density.
+
+\begin{example}
+	Consider the plane wave \(\psi(x) = e^{i k_0 x}\). It is not hard to guess that \(\tilde\psi\) is some multiple of \(\delta(k - k_0)\). In particular, letting \(\tilde\psi(k) = \sqrt{2\pi} \delta(k - k_0)\), we get
+	\[
+		\psi(x) = \frac{1}{\sqrt{2\pi}} \delta(k - k_0) e^{ikx} \,dk = e^{i k_0 x},
+	\]
+	as desired.
+\end{example}
+
+In momentum space, we have \(p = \hbar k\). Therefore, we can rewrite the two equations as
+\begin{align*}
+	\psi(x) &= \frac{1}{\sqrt{2\pi\hbar}} \int \tilde\psi(p) e^{ipx/\hbar} \,dp \\
+	\tilde\psi(p) &= \frac{1}{\sqrt{2\pi\hbar}} \int \psi(p) e^{-ipx/\hbar} \,dx.
+\end{align*}
+
+\subsection{Statistical Interpretation}
+The wavefunctions \(\psi(x)\) and \(\tilde\psi(p)\) have no direct physical meaning, i.e.\ it cannot be measured. It only gives us the probability densities \(P(x) = \abs{\psi(x)}^2\) and \(P(p) = \abs{\tilde\psi(p)}^2\). We can define the \vocab{average} of \(x\) to be
+\[
+	\angles x = \infint x P(x) \,dx,
+\]
+the \vocab{variance} of \(x\) to be
+\[
+	\angles{(x - \angles{x})^2} = \angles{x^2} - \angles{x}^2,
+\]
+and the \vocab{standard deviation} of \(x\) to be
+\[
+	\Delta x = \sqrt{\angles{(x - \angles x)^2}}.
+\]
+We can similarly define these for \(k\) and \(p\).
+
+Suppose that we have \(\psi(x)\) and we wish to find \(\angles p\). One way to do this is to use the Fourier transform to compute \(\tilde \psi(p)\), and then using this to get \(P(p)\) and \(\angles p\). However, there is another way to do this. Trying to compute \(\angles p\), we get
+\begin{align*}
+	\angles p
+		&= \infint p \cdot P(x) \,dx \\
+		&= \infint \psi^*(x) \cdot p \cdot \psi(x) \,dx.
+	\intertext{Note that \(-i\hbar \pdv{}{x} e^{ipx/\hbar} = p e^{ipx/\hbar} \implies -i\hbar \pdv{}{x} \psi(x) = p \psi(x)\) by linearity (every wavefunction is just the superposition of plane waves). We call \(\hat p = -i\hbar \pdv{}{x}\) the \vocab{momentum operator}. Therefore, we can write the integral as}
+		&= \infint \psi^*(x) \hat p \psi(x) \,dx.
+\end{align*}
+We can similarly write
+\[
+	\angles x = \infint \psi^*(x) \hat x \psi(x) \,dx,
+\]
+which gives the \vocab{position operator} \(\hat x = x\), which is just a multiplication by \(x\).
+
+An important thing to keep in mind is that these operators don't always commute with other terms, because they have derivative operators. Also, note that we have written the operators down in position-space. If we change our basis so that we are in momentum-space, we get the operators
+\[
+	\hat p = p \qquad \hat x = i\hbar \pdv{}{p}.
+\]
+
+
+
+\end{document}
+

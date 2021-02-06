@@ -1,0 +1,109 @@
+\documentclass{scrartcl}
+\usepackage{chez}
+
+\begin{document}
+\section{March 04, 2019}
+\subsection{On the Separable Solutions}
+Consider the solutions to \(\hat H\) in the time independent Schr\"odinger equation. They are \vocab{stationary states}, i.e.\ the observables are all independent of time for these states. In particular, we have the probability
+\[
+	P(x) = \abs{\Psi(x, t)^2} = \abs{\psi(x) \cdot c e^{-iEt/\hbar}}^2 = \abs{\psi(x) c}^2.
+\]
+Similarly, the expected value of some observable \(\hat A\) is
+\[
+	\angles{A} = \int \Psi^*(x, t) \hat A \Psi(x, t) \,dx = \int \psi^*(x) c^* \hat A \psi(x) c \,dx.
+\]
+
+Moreover, these states have a definite energy, i.e.\ \(\Delta E = 0\). We can indeed compute
+\begin{align*}
+	\angles H &= \int \psi^*(x) \hat H \psi(x) \,dx = E \\
+	\angles{H^2} &= \int \psi^*(x) \hat H^2 \psi(x) \,dx = E^2,
+\end{align*}
+since \(\hat H \psi = E \psi\). Therefore, we have \(\Delta E = \angles{H^2} - \angles H^2 = 0\).
+
+\begin{proposition}[Separable Solutions to the Schr\"odinger Equation]
+	The most important thing about the separable solutions is that a general solution is a linear combination of the separable solutions. This is because we found all of the eigenfunctions \(\psi_n(x)\) of a Hermitian operator \(\hat H\), which we know form a basis for the entire space. Therefore, once we find the eigenfunctions \(\psi_n(x)\), a general solution can be written as
+	\[
+		\Psi(x, t) = \sum_{n = 1}^{\infty} c_n \psi_n(x) e^{-i E_n t / \hbar}.
+	\]
+\end{proposition}
+
+\subsection{Infinite Square Well}
+Consider a particle with the potential
+\[
+	V(x) = \begin{cases}
+		0 & 0 \leq x \leq a \\
+		\infty & \text{otherwise}.
+	\end{cases}
+\]
+\begin{center}
+	\begin{asy}
+		import cse5;
+		size(5cm);
+
+		D((-1, 0)--(4, 0), gray(0.5), Arrows(TeXHead));
+		D((0, -0.2)--(0, 3), gray(0.5), EndArrow(TeXHead));
+
+		D((0, 2.8)--(0, 0)--(3, 0)--(3, 2.8), linewidth(1));
+
+		MP("x", (4, 0), dir(0));
+		MP("a", (3, -0.2), dir(-90));
+		MP("0", (0, -0.2), dir(-90));
+		MP("V(x)", (0, 3), dir(90));
+	\end{asy}
+\end{center}
+This represents a particle that is completely free except at the two ends at \(x = 0\) and \(x = a\). Let the system start at \(\Psi(x, 0) = \psi_0(x)\). Then if we have the eigenstates \(\phi_n(x)\) defined by \(\hat H \phi_n = E_n \phi_n\), we have the general solution
+\[
+	\Psi(x, t) = \sum_{n} c_n \phi_n(x) e^{-i E_n t / \hbar},
+\]
+where we find \(c_n\) by taking the dot product at \(t = 0\):
+\begin{align*}
+	c_n &= \braket{\phi_n}{\psi_0} \\
+		&= \int \phi_n^*(x) \phi_0(x) \,dx.
+\end{align*}
+
+We will now find the eigenstates. We have the equation
+\[
+	\hat H = \frac{\hat p^2}{2m} + V(x) = -\frac{\hbar^2}{2m} \ddv{}{x} + V(x)
+		\implies -\frac{\hbar^2}{2m} \ddv{\psi(x)}{x} + V(x) \psi(x) = E \psi(x).
+\]
+Outside of the interval \([0, a]\), we have \(V = \infty\), so in order for \(E\) to be finite, \(\psi(x) = 0\).
+
+Inside the interval, we have something more interesting. In particular, we have
+\[
+	-\frac{\hbar^2}{2m} \ddv{\psi(x)}{x} = E \psi(x)
+		\implies \psi''(x) = -\frac{2mE}{\hbar^2} \psi(x).
+\]
+If we let \(k = \sqrt{2mE}/\hbar\), then we have the general solution
+\[
+	\psi(x) = A \sin kx + B \cos kx.
+\]
+To find \(A\) and \(B\), we can use the fact that the wavefunctions are normalized, and they are continuous, i.e.\ \(\psi(0) = \psi(a) = 0\). In particular,
+\[
+	\psi(0) = A \sin 0 + B \cos 0 = 0 \implies B = 0.
+\]
+Moreover,
+\[
+	\psi(a) = A \sin ka = 0 \implies \sin ka = 0,
+\]
+because otherwise \(A = 0\) would give us the zero wavefunction. This means \(ka = n \pi\) for some \(n \in \ZZ\). Then we have the solutions \(k = k_n = \frac{n\pi}{a}\) for \(n \in \ZZ\). Note that \(n = 0\) is bad because we get the zero wavefunction, and \(n < 0\) give us repeated solutions, so we will just take \(n \in \NN\). Surprisingly, this does not give a restriction on \(A\), but rather a restriction on \(E\). In particular, we get the possible values of \(E\) are
+\[
+	E_n = \frac{\hbar^2 k_n^2}{2m} = \frac{n^2 \pi^2 \hbar^2}{2 m a^2}.
+\]
+This means that the particle can only have specific energies! We say that the particle is \vocab{quantized}.
+
+Finishing up, we normalize to get \(\abs{A}^2 = \frac{2}{a}\), and for simplicity we will choose the real value \(A = \sqrt{\frac{2}{a}}\). This gives us the eigenstates
+\[
+	\phi_n(x) = \sqrt{\frac{2}{a}} \sin(k_n x),
+\]
+where \(k_n = \frac{n\pi}{a}\) for \(n \in \NN\), yielding \(E_n = \frac{\hbar^2 k_n^2}{2m}\). Note that \(E_n > 0\). This makes sense because we have a range that \(x\) is in, meaning that \(\Delta x\) is finite. This means \(\Delta p\) is nonzero, which means \(E\) is nonzero, because otherwise \(p\) will have a certain value.
+
+
+
+
+
+
+
+
+
+
+\end{document}
